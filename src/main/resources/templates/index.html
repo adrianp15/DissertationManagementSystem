@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{css/style.css}">
+  <title>Dissertation Management System</title>
+</head>
+
+<body>
+ <nav>
+     <a href="#" class="logo">
+         Dissertation Management System
+     </a>
+     <ul class="nav-links">
+         <li class="nav-item"><a href="#">Home</a></li>
+         <li class="nav-item"><a href="#">Login</a></li>
+         <li class="nav-item"><a href="#">Register</a></li>
+         <li class="nav-item"><a href="#">Contact</a></li>
+     </ul>
+ </nav>
+
+  <!-- Home -->
+  <section id="showcase" >
+      <div class="container showcase-container">
+          <img th:src="@{img/home.jpg}" alt="image" width="300" height="200">
+          <h1>Dissertation Management System</h1>
+          <h1>Welcome</h1>
+          <a href="#" class="btn">Read more</a>
+      </div>
+
+
+    <img th:src="@{../static/img/home.jpg}" alt="image" width="300" height="200">
+    <img th:src="@{static/img/home.jpg}" alt="image" width="300" height="200">
+    <img th:src="@{img/home.jpg}" alt="image" width="300" height="200">
+
+
+<!--    <div id="home-content">-->
+
+      <!--      <div id="home-content-inner" class="text-center">-->
+
+      <!--        <h1 class="animated fadeInDown">Dissertation Management System</h1>-->
+
+      <!--        <div id="home-btn" class="animated fadeInUp">-->
+      <!--          <a class="btn btn-general btn-home smooth-scroll" th:href="@{'/main'}" title="Start Now" role="button">Start-->
+      <!--            Now</a>-->
+      <!--        </div>-->
+
+      <!--      </div>-->
+
+      <!--    </div>-->
+  </section>
+
+</body>
+
+</html>
