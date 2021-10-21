@@ -1,5 +1,6 @@
 html {
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 *, *::before, *::after {
@@ -16,6 +17,9 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .logo {
@@ -51,7 +55,7 @@ nav {
     color: #ffffff;
 }
 
-
+/*  HOME SHOWCASE */
 
 .container {
     max-width: 960px;
@@ -107,5 +111,128 @@ nav {
 }
 
 .btn:hover {
-    opacity: 0.7;
+    opacity: 0.9;
+    color: #ffffff;
 }
+
+/* HOME - BENEFITS SECTION */
+
+#benefits {
+    margin: 0px auto;
+    max-width: 100%;
+}
+
+#benefits .container-benefits{
+    max-width: 90%;
+    margin: 0px auto;
+}
+
+#benefits h1 {
+    margin-top: 30px;
+    font-size: 2.5rem;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#benefits .container-bar {
+    display: flex;
+    margin-top: 30px;
+    overflow: hidden;
+    padding: 0 3rem;
+}
+
+#benefits .container-bar .bar-text {
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+#benefits .bars {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+}
+
+#benefits .bar1 {
+    width: 40%;
+    background-color: #0B628DFF;
+}
+
+#benefits .bar2 {
+    width: 50%;
+    background-color: #0B628DFF;
+}
+
+#benefits .bar3 {
+    width: 60%;
+    background-color: #0B628DFF;
+}
+
+#benefits .bar4 {
+    width: 70%;
+    background-color: #0B628DFF;
+}
+
+/* HOME - FEATURES SECTION */
+
+#features {
+    margin-bottom: 20px;
+}
+
+#features h1 {
+    margin-top: 30px;
+    font-size: 2.5rem;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#features h2 {
+    font-size: 1.8rem;
+}
+
+#features p {
+    font-size: 1.2rem;
+}
+
+#features .container-features{
+    max-width: 90%;
+    margin: 0px auto;
+}
+
+#features .container-features .feature-box {
+    border: 2px solid;
+    padding: 15px;
+    margin: 10px;
+}
+
+#features .container-features .features-box-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px;
+}
+
+/* FOOTER */
+
+#main-footer {
+    background: #0B628DFF;
+    color: #fff;
+}
+
+#main-footer a {
+    color: #fff;
+}
+
+#main-footer .footer-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1.5rem;
+    max-width: 80%;
+    margin: auto;
+    padding: 2rem 2rem 0 2rem;
+    overflow: hidden;
+}
+
+
+
+
