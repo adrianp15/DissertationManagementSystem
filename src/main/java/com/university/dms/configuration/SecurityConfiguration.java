@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login", "/index").permitAll()
-                .antMatchers("/registration").anonymous()
+                .antMatchers("/register").anonymous()
                 .antMatchers( "/img/**","/css/**","/resources/**", "/static/**", "/static/css/**", "/static/js/**", "/static/img/**", "/video/**").permitAll()
                 .antMatchers( "/css/**", "/js/**", "/img/**", "/video/**").permitAll()
                 .antMatchers("/main", "/main/**").permitAll()

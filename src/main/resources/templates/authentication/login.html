@@ -21,7 +21,7 @@
         <ul class="nav-links">
             <li class="nav-item"><a th:href="@{/index}">Home</a></li>
             <li class="nav-item"><a th:href="@{/login}">Login</a></li>
-            <li class="nav-item"><a href="#">Register</a></li>
+            <li class="nav-item"><a th:href="@{/register}">Register</a></li>
             <li class="nav-item"><a href="#">Contact</a></li>
         </ul>
     </nav>
@@ -30,7 +30,7 @@
         <h2>Login</h2>
         <hr>
         <div class="login-fields-box">
-            <form id="login" th:action="@{/login}" method="POST">
+            <form id="login" th:action="@{/login-user}" method="POST">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
@@ -63,7 +63,7 @@
                 <h4>Site links</h4>
                 <ul>
                     <li><a th:href="@{/login}">Login</a></li>
-                    <li><a href="#">Register</a></li>
+                    <li><a th:href="@{/register}">Register</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
             </div>

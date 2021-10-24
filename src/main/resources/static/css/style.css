@@ -284,3 +284,39 @@ nav {
 
 
 
+/* REGISTER PAGE */
+
+#register-box {
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 40vw;
+    position: relative;
+    margin: 50px auto auto auto;
+    text-align: center;
+}
+
+#register-box hr {
+    border: 1px solid black;
+}
+
+#register-box h2 {
+    margin-top: 20px;
+
+}
+
+#register-box .register-fields-box {
+    width: 80%;
+    margin: auto;
+    padding-top: 30px;
+}
+
+#register-box .register-fields-box .register-button {
+    display: inline-block;
+    border: none;
+    background: rgba(13, 110, 139, 0.75);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
