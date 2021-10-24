@@ -1,7 +1,18 @@
 html {
     box-sizing: border-box;
     scroll-behavior: smooth;
+    min-height: 100vh;
+
 }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
 
 *, *::before, *::after {
     box-sizing: inherit;
@@ -11,7 +22,7 @@ html {
 
 nav {
     width: 100%;
-    background-color: #1e7aff;
+    background-color: #169fcb;
     padding-left: 30px;
     padding-right: 10px;
     display: flex;
@@ -119,7 +130,7 @@ nav {
 
 #benefits {
     margin: 0px auto;
-    max-width: 100%;
+    min-width: 90%;
 }
 
 #benefits .container-benefits{
@@ -233,6 +244,43 @@ nav {
     overflow: hidden;
 }
 
+
+/* LOGIN PAGE */
+
+#login-box {
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 40vw;
+    position: relative;
+    margin: 50px auto auto auto;
+    text-align: center;
+}
+
+#login-box hr {
+    border: 1px solid black;
+}
+
+#login-box h2 {
+    margin-top: 20px;
+
+}
+
+#login-box .login-fields-box {
+    width: 80%;
+    margin: auto;
+    padding-top: 30px;
+}
+
+#login-box .login-fields-box .login-button {
+    display: inline-block;
+    border: none;
+    background: rgba(13, 110, 139, 0.75);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
 
 
 

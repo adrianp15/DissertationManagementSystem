@@ -15,12 +15,12 @@
 
 <body>
  <nav>
-     <a href="#" class="logo">
+     <a th:href="@{/index}" class="logo">
          Dissertation Management System
      </a>
      <ul class="nav-links">
-         <li class="nav-item"><a href="#">Home</a></li>
-         <li class="nav-item"><a href="#">Login</a></li>
+         <li class="nav-item"><a th:href="@{/index}">Home</a></li>
+         <li class="nav-item"><a th:href="@{/login}">Login</a></li>
          <li class="nav-item"><a href="#">Register</a></li>
          <li class="nav-item"><a href="#">Contact</a></li>
      </ul>
@@ -93,7 +93,7 @@
         <div>
             <h4>Site links</h4>
             <ul>
-                <li><a href="#">Login</a></li>
+                <li><a th:href="@{/login}">Login</a></li>
                 <li><a href="#">Register</a></li>
                 <li><a href="#">About</a></li>
             </ul>

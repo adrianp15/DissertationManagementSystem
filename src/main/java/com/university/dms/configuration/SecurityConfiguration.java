@@ -48,12 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login", "/index").permitAll()
                 .antMatchers("/registration").anonymous()
                 .antMatchers( "/img/**","/css/**","/resources/**", "/static/**", "/static/css/**", "/static/js/**", "/static/img/**", "/video/**").permitAll()
                 .antMatchers( "/css/**", "/js/**", "/img/**", "/video/**").permitAll()
                 .antMatchers("/main", "/main/**").permitAll()
-                .antMatchers("/bookmark", "/bookmark/**").authenticated()
                 .antMatchers("/adminpanel", "/adminpanel/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
