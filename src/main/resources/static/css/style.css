@@ -320,3 +320,7 @@ nav {
     margin-bottom: 30px;
     text-decoration: none;
 }
+
+.validation-message {
+    color: #d41b19;
+}

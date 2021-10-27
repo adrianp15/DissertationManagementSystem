@@ -48,23 +48,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/login", "/index").permitAll()
-                .antMatchers("/register").anonymous()
+                .antMatchers("/login", "/index", "/register", "/authentication/register").permitAll()
                 .antMatchers( "/img/**","/css/**","/resources/**", "/static/**", "/static/css/**", "/static/js/**", "/static/img/**", "/video/**").permitAll()
                 .antMatchers( "/css/**", "/js/**", "/img/**", "/video/**").permitAll()
                 .antMatchers("/main", "/main/**").permitAll()
-                .antMatchers("/adminpanel", "/adminpanel/**").hasAuthority("ADMIN").anyRequest()
-                .authenticated().and().csrf().disable().formLogin()
-                .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/main")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/main").and().exceptionHandling()
-                .accessDeniedPage("/main");
+                .and().formLogin()
+                .loginPage("/login").failureUrl("/login?error=true");
+//                .and().logout()
+//                .logoutSuccessUrl("/index");
+
     }
 
-
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers("/login", "/register", "/home")
+//                .permitAll()
+//                .antMatchers("/img/**", "/css/**", "/resources/**", "/static/**", "/static/css/**", "/static/js/**", "/static/img/**", "/video/**").permitAll()
+//                .antMatchers("/css/**", "/js/**", "/img/**", "/video/**").permitAll()
+//                .antMatchers("/account/**").hasAnyAuthority("CUSTOMER", "ADMIN")
+//                .and()
+//                //Setting HTTPS for my account
+//                .requiresChannel().anyRequest().requiresSecure()
+//                .and()
+//
+//                //Login configurations
+//                .formLogin().defaultSuccessUrl("/account/home")
+//                .loginPage("/authentication/login")
+//                .failureUrl("/login?error=true")
+//                //logout configurations
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/index");
+//
+//
+//    }
 
 }

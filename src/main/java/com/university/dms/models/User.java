@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
@@ -17,16 +19,18 @@ public class User  {
 
     @Email(message = "*Please provide a valid Email")
     @NotEmpty(message = "*Please provide an email")
+    @NotNull(message = "*Please provide an email")
     private String email;
 
-    @Length(min = 5, message = "*Your password must have at least 5 characters")
-    @NotEmpty(message = "*Please provide your password")
+    @Length(min = 8, message = "*Your password must have at least 8 characters")
     private String password;
 
-    @NotEmpty(message = "*Please provide your name")
+    @NotEmpty(message = "*Please provide your first name")
+    @NotNull(message = "*Please provide your first name")
     private String firstName;
 
     @NotEmpty(message = "*Please provide your last name")
+    @NotNull(message = "*Please provide your last name")
     private String lastName;
 
     private int active;

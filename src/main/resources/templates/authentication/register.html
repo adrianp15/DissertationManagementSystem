@@ -30,24 +30,26 @@
     <h2>Register</h2>
     <hr>
     <div class="register-fields-box">
-        <form id="registration" th:action="@{/register-user}" th:object="${user}" method="POST" autocomplete="off">
+        <form id="registration" th:action="@{/register-user}" th:object="${user}" method="post" autocomplete="off">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
-                <input type="text" id="firstname" name="firstname" placeholder="First name"
-                       class="form-control" th:field="*{firstName}"/>
+                <input type="text" id="firstName" name="firstName" placeholder="First name"
+                       class="form-control" th:field="*{firstName}" />
+
             </div>
-            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message"></p>
+            <p class="pull-right alert alert-danger" th:if="${firstNameError}">*Please provide your first name</p>
+
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
-                <input type="text" id="lastname" name="last name" placeholder="Last name"
+                <input type="text" id="lastName" name="lastName" placeholder="Last name"
                        class="form-control" th:field="*{lastName}"/>
             </div>
-            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></p>
+            <p class="pull-right alert alert-danger" th:if="${lastNameError}">*Please provide your last name</p>
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -56,7 +58,7 @@
                 <input type="text" id="email" name="email" placeholder="Email"
                        class="form-control" th:field="*{email}"/>
             </div>
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></p>
+            <p class="pull-right alert alert-danger" th:if="${emailError}">*Please provide a valid Email</p>
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -65,7 +67,7 @@
                 <input type="password" th:placeholder="Password"
                        id="password" name="password" class="form-control" th:field="*{password}"/>
             </div>
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></p>
+            <p class="pull-right alert alert-danger" th:if="${passwordError}">*Your password must have at least 8 characters</p>
 
             <p style="font-size: 20px">Select the account type</p>
             <select class="form-control" id="type" name="type">
