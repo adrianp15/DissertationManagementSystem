@@ -1,7 +1,7 @@
-package com.gpch.login.controller;
+package com.university.dms.controller;
 
-import com.gpch.login.model.User;
-import com.gpch.login.service.UserService;
+import com.university.dms.model.User;
+import com.university.dms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
