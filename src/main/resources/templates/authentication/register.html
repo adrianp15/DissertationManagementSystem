@@ -21,7 +21,7 @@
     <ul class="nav-links">
         <li class="nav-item"><a th:href="@{/index}">Home</a></li>
         <li class="nav-item"><a th:href="@{/login}">Login</a></li>
-        <li class="nav-item"><a th:href="@{/register}">Register</a></li>
+        <li class="nav-item"><a th:href="@{/registration}">Register</a></li>
         <li class="nav-item"><a href="#">Contact</a></li>
     </ul>
 </nav>
@@ -30,44 +30,69 @@
     <h2>Register</h2>
     <hr>
     <div class="register-fields-box">
-        <form id="registration" th:action="@{/register-user}" th:object="${user}" method="post" autocomplete="off">
-            <div class="input-group mb-3">
+        <form id="registration" th:action="@{/registration}" th:object="${user}" method="post" autocomplete="off">
+
+            <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+               th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+                error</p>
+
+
+            <div class="input-group mb-3" th:classappend="${#fields.hasErrors('firstName')}? 'has-error':''">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
                 <input type="text" id="firstName" name="firstName" placeholder="First name"
                        class="form-control" th:field="*{firstName}" />
-
             </div>
-            <p class="pull-right alert alert-danger" th:if="${firstNameError}">*Please provide your first name</p>
+            <p class="error-message"
+               th:each="error: ${#fields.errors('firstName')}"
+               th:text="${error}">Validation error</p>
 
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" th:classappend="${#fields.hasErrors('lastName')}? 'has-error':''">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
                 <input type="text" id="lastName" name="lastName" placeholder="Last name"
                        class="form-control" th:field="*{lastName}"/>
             </div>
-            <p class="pull-right alert alert-danger" th:if="${lastNameError}">*Please provide your last name</p>
+            <p class="error-message"
+               th:each="error : ${#fields.errors('lastName')}"
+               th:text="${error}">Validation error</p>
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" th:classappend="${#fields.hasErrors('userName')}? 'has-error':''">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                </div>
+                <input type="text" id="userName" name="userName" placeholder="Username"
+                       class="form-control" th:field="*{userName}"/>
+            </div>
+            <p class="error-message"
+               th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
+                error</p>
+
+            <div class="input-group mb-3" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                 </div>
                 <input type="text" id="email" name="email" placeholder="Email"
                        class="form-control" th:field="*{email}"/>
             </div>
-            <p class="pull-right alert alert-danger" th:if="${emailError}">*Please provide a valid Email</p>
+            <p class="error-message"
+               th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
+                error</p>
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
                 </div>
                 <input type="password" th:placeholder="Password"
                        id="password" name="password" class="form-control" th:field="*{password}"/>
             </div>
-            <p class="pull-right alert alert-danger" th:if="${passwordError}">*Your password must have at least 8 characters</p>
+            <p class="error-message"
+               th:each="error : ${#fields.errors('password')}"
+               th:text="${error}">Validation error</p>
+
 
             <p style="font-size: 20px">Select the account type</p>
             <select class="form-control" id="type" name="type">
@@ -92,7 +117,7 @@
             <h4>Site links</h4>
             <ul>
                 <li><a th:href="@{/login}">Login</a></li>
-                <li><a th:href="@{/register}">Register</a></li>
+                <li><a th:href="@{/registration}">Register</a></li>
                 <li><a href="#">About</a></li>
             </ul>
         </div>
@@ -103,6 +128,11 @@
         </div>
     </div>
 </footer>
+
+<script type="text/javascript"
+        th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+<script type="text/javascript"
+        th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

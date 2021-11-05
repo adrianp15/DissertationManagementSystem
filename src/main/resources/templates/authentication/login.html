@@ -21,7 +21,7 @@
         <ul class="nav-links">
             <li class="nav-item"><a th:href="@{/index}">Home</a></li>
             <li class="nav-item"><a th:href="@{/login}">Login</a></li>
-            <li class="nav-item"><a th:href="@{/register}">Register</a></li>
+            <li class="nav-item"><a th:href="@{/registration}">Register</a></li>
             <li class="nav-item"><a href="#">Contact</a></li>
         </ul>
     </nav>
@@ -30,14 +30,24 @@
         <h2>Login</h2>
         <hr>
         <div class="login-fields-box">
-            <form id="login" th:action="@{/login-user}" method="POST">
+            <form id="login" th:action="@{/login}" method="post">
+
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">Invalid username or
+                        password.</div>
+                </div>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">You have been logged out.</div>
+                </div>
+
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                     </div>
-                    <input type="text" id="email" name="email" th:placeholder="Email"
+                    <input type="text" id="user_name" name="user_name" th:placeholder="Username"
                            class="form-control"/>
                 </div>
+
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -48,7 +58,7 @@
                 <div th:if="${param.error}">
                     <p style="font-size: 20px; color: #FF1C19;">Email or Password invalid, please verify</p>
                 </div>
-                <h6 class="text-success" th:text="${successMessage}"></h6>
+<!--                <h6 class="text-success" th:text="${successMessage}"></h6>-->
                 <button type="submit" class="login-button">Login</button>
             </form>
         </div>
@@ -64,7 +74,7 @@
                 <h4>Site links</h4>
                 <ul>
                     <li><a th:href="@{/login}">Login</a></li>
-                    <li><a th:href="@{/register}">Register</a></li>
+                    <li><a th:href="@{/registration}">Register</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
             </div>

@@ -2,108 +2,108 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
-    crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-  <link rel="stylesheet" th:href="@{css/style.css}">
-  <title>Dissertation Management System</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+		  crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+		  crossorigin="anonymous">
+	<link rel="stylesheet" th:href="@{css/style.css}">
+	<title>Dissertation Management System</title>
 </head>
 
 <body>
- <nav>
-     <a th:href="@{/index}" class="logo">
-         Dissertation Management System
-     </a>
-     <ul class="nav-links">
-         <li class="nav-item"><a th:href="@{/index}">Home</a></li>
-         <li class="nav-item"><a th:href="@{/login}">Login</a></li>
-         <li class="nav-item"><a th:href="@{/register}">Register</a></li>
-         <li class="nav-item"><a href="#">Contact</a></li>
-     </ul>
- </nav>
+<nav>
+	<a th:href="@{/index}" class="logo">
+		Dissertation Management System
+	</a>
+	<ul class="nav-links">
+		<li class="nav-item"><a th:href="@{/index}">Home</a></li>
+		<li class="nav-item"><a th:href="@{/login}">Login</a></li>
+		<li class="nav-item"><a th:href="@{/registration}">Register</a></li>
+		<li class="nav-item"><a href="#">Contact</a></li>
+	</ul>
+</nav>
 
-  <!-- Home -->
-  <section id="showcase" >
-      <div class="container showcase-container">
-          <h1>Dissertation Management System</h1>
-          <h1>Welcome</h1>
-          <a href="#benefits" class="btn">Read more</a>
-      </div>
-  </section>
+<!-- Home -->
+<section id="showcase" >
+	<div class="container showcase-container">
+		<h1>Dissertation Management System</h1>
+		<h1>Welcome</h1>
+		<a href="#benefits" class="btn">Read more</a>
+	</div>
+</section>
 
- <section id="benefits">
-     <div class="container-benefits">
-         <h1>Benefits</h1>
+<section id="benefits">
+	<div class="container-benefits">
+		<h1>Benefits</h1>
 
-         <div class="container-bar">
-             <div class="bars bar1"></div>
-             <div class="bar-text">Save supervisor time</div>
-         </div>
-         <div class="container-bar">
-             <div class="bars bar2"></div>
-             <div class="bar-text">Increase quality</div>
-         </div>
-         <div class="container-bar">
-             <div class="bars bar3"></div>
-             <div class="bar-text">Increase student autonomy</div>
-         </div>
-         <div class="container-bar">
-             <div class="bars bar4"></div>
-             <div class="bar-text">Increase thesis completion</div>
-         </div>
-     </div>
- </section>
+		<div class="container-bar">
+			<div class="bars bar1"></div>
+			<div class="bar-text">Save supervisor time</div>
+		</div>
+		<div class="container-bar">
+			<div class="bars bar2"></div>
+			<div class="bar-text">Increase quality</div>
+		</div>
+		<div class="container-bar">
+			<div class="bars bar3"></div>
+			<div class="bar-text">Increase student autonomy</div>
+		</div>
+		<div class="container-bar">
+			<div class="bars bar4"></div>
+			<div class="bar-text">Increase thesis completion</div>
+		</div>
+	</div>
+</section>
 
- <section id="features">
-     <div class="container-features">
-         <h1>Features</h1>
-         <div class="features-box-grid">
-             <div class="feature-box">
-                 <h2>Increase in student autonomy</h2>
-                 <p>As students are always informed, knowing what to do,how to do it and when it needs to be done, students are able to work independently without needing as much supervisor time.</p>
-             </div>
+<section id="features">
+	<div class="container-features">
+		<h1>Features</h1>
+		<div class="features-box-grid">
+			<div class="feature-box">
+				<h2>Increase in student autonomy</h2>
+				<p>As students are always informed, knowing what to do,how to do it and when it needs to be done, students are able to work independently without needing as much supervisor time.</p>
+			</div>
 
-             <div class="feature-box">
-                 <h2>Improvement in feedback quality and thesis quality</h2>
-                 <p>With the right tools in place, feedback becomes better and more relevant, leading to better thesis work from the student. </p>
-             </div>
+			<div class="feature-box">
+				<h2>Improvement in feedback quality and thesis quality</h2>
+				<p>With the right tools in place, feedback becomes better and more relevant, leading to better thesis work from the student. </p>
+			</div>
 
-             <div class="feature-box">
-                 <h2>Decrease in supervisor time spent on administration and beginners' questions</h2>
-                 <p>With the structure in place, supervisors can use their hours on their students’ essays rather than on administrative work related to their students’ essays.  </p>
-             </div>
+			<div class="feature-box">
+				<h2>Decrease in supervisor time spent on administration and beginners' questions</h2>
+				<p>With the structure in place, supervisors can use their hours on their students’ essays rather than on administrative work related to their students’ essays.  </p>
+			</div>
 
-             <div class="feature-box">
-                 <h2>Increase in thesis completions</h2>
-                 <p>The dissertation management system can lead to a major increase in completed theses by making the dissertation writting process more efficient</p>
-             </div>
-         </div>
+			<div class="feature-box">
+				<h2>Increase in thesis completions</h2>
+				<p>The dissertation management system can lead to a major increase in completed theses by making the dissertation writting process more efficient</p>
+			</div>
+		</div>
 
-     </div>
- </section>
+	</div>
+</section>
 
 <footer id="main-footer">
-    <div class="footer-container">
-        <h4>Dissertation Management System</h4>
+	<div class="footer-container">
+		<h4>Dissertation Management System</h4>
 
-        <div>
-            <h4>Site links</h4>
-            <ul>
-                <li><a th:href="@{/login}">Login</a></li>
-                <li><a th:href="@{/register}">Register</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </div>
+		<div>
+			<h4>Site links</h4>
+			<ul>
+				<li><a th:href="@{/login}">Login</a></li>
+				<li><a th:href="@{/registration}">Register</a></li>
+				<li><a href="#">About</a></li>
+			</ul>
+		</div>
 
-        <div>
-            <h4>Contact</h4>
-            <p>example@email.com</p>
-        </div>
-    </div>
+		<div>
+			<h4>Contact</h4>
+			<p>example@email.com</p>
+		</div>
+	</div>
 </footer>
 
 </body>
