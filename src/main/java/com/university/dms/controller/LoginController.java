@@ -1,6 +1,8 @@
 package com.university.dms.controller;
 
+import com.university.dms.model.Role;
 import com.university.dms.model.User;
+import com.university.dms.repository.RoleRepository;
 import com.university.dms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class LoginController {
@@ -17,15 +20,8 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-
-
-
-//    @GetMapping(value={ "", "/", "/index"})
-//    public ModelAndView index(){
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("index");
-//        return modelAndView;
-//    }
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping(value={ "/login"})
     public ModelAndView login(){
@@ -34,19 +30,20 @@ public class LoginController {
         return modelAndView;
     }
 
-
     @GetMapping(value="/registration")
     public ModelAndView registration(){
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
+        List<Role> roles = roleRepository.findAll();
+        modelAndView.addObject("roles", roles);
         modelAndView.addObject("user", user);
         modelAndView.setViewName("/authentication/register");
         return modelAndView;
     }
 
     @PostMapping(value = "/registration")
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
+    public String createNewUser(@Valid User user, BindingResult bindingResult) {
+        //ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByUserName(user.getUserName());
         if (userExists != null) {
             bindingResult
@@ -54,15 +51,11 @@ public class LoginController {
                             "There is already a user registered with the user name provided");
         }
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("/authentication/register");
+           return "/authentication/register";
         } else {
             userService.saveUser(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
-            modelAndView.setViewName("/authentication/register");
-
+            return "redirect:/login";
         }
-        return modelAndView;
     }
 
 }

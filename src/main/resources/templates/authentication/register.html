@@ -95,10 +95,10 @@
 
 
             <p style="font-size: 20px">Select the account type</p>
-            <select class="form-control" id="type" name="type">
-                <option th:each="type : ${userTypes}"
-                        th:value="${type}"
-                        th:text="${type}"
+            <select class="form-control" id="roles" name="roles">
+                <option th:each="role : ${roles}"
+                        th:value="${role.id}"
+                        th:text="${role.role}"
                         />
             </select>
 
