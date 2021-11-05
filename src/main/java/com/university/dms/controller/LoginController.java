@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,8 +35,12 @@ public class LoginController {
     public ModelAndView registration(){
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
-        List<Role> roles = roleRepository.findAll();
-        modelAndView.addObject("roles", roles);
+
+        ArrayList<String> accTypes = new ArrayList<>();
+        accTypes.add("Student");
+        accTypes.add("Supervisor");
+
+        modelAndView.addObject("accTypes", accTypes);
         modelAndView.addObject("user", user);
         modelAndView.setViewName("/authentication/register");
         return modelAndView;

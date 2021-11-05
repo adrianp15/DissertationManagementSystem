@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/home.css}">
+    <title>Dissertation Management System</title>
 </head>
+
 <body>
-    <h1>AUTHENTICATED</h1>
+<nav>
+    <a th:href="@{/index}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text = "${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a href="#">My profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section id="side-nav">
+    <div class="sidenav">
+        <a href="#">Home</a>
+        <a href="#">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section id="page-content">
+
+    <h2>Sidebar</h2>
+    <p>This sidebar is of full height (100%) and always shown.</p>
+    <p>Scroll down the page to see the result.</p>
+    <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+    <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+    <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+    <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+
+</section>
+
+
 </body>
 </html>
