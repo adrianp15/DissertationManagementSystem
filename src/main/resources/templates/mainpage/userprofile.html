@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/home.css}">
+    <link rel="stylesheet" th:href="@{css/profile.css}">
+    <title>Dissertation Management System</title>
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text = "${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a href="#">My profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section id="side-nav">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a href="#">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section id="page-content">
+    <div id="page-top">
+        <h1 class="profile-page-title">My profile</h1>
+        <hr class="horizontal_line">
+    </div>
+
+    <div id="user-details">
+        <p class="details-header">Name</p>
+        <p th:text = "${user.firstName} + ' ' + ${user.lastName}"></p>
+
+        <div class="profile-input-boxes">
+            <form id="update-user" th:action="@{/update-user}" th:object="${user}" method="post" autocomplete="off">
+
+                <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+                   th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+                    error</p>
+
+                <p class="details-header">Email</p>
+                <div class="input-group mb-3" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input type="text" id="email" name="email" placeholder="Email"
+                           class="form-control" th:field="*{email}"/>
+                </div>
+                <p class="error-message"
+                   th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
+                    error</p>
+
+                <p class="details-header">Password</p>
+                <div class="input-group mb-3" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    </div>
+                    <input type="password" placeholder="Type your new password"
+                           id="password" name="password" class="form-control" th:field="*{password}"/>
+                </div>
+                <p class="error-message"
+                   th:each="error : ${#fields.errors('password')}"
+                   th:text="${error}">Validation error</p>
+
+                <p class="details-header">Phone</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    </div>
+                    <input type="text" id="phone" name="phone" placeholder="Phone"
+                           class="form-control" th:field="*{phone}"/>
+                </div>
+
+                <p class="details-header">Skype</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fab fa-skype"></i></span>
+                    </div>
+                    <input type="text" id="skype" name="skype" placeholder="Skype"
+                           class="form-control" th:field="*{skype}"/>
+                </div>
+
+                <p class="details-header">Other contact information</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input type="text" id="other_contact" name="other_contact" placeholder="Other contact information"
+                           class="form-control" th:field="*{other_contact}" />
+                </div>
+
+                <button type="submit" class="save-button">Save</button>
+            </form>
+        </div>
+
+    </div>
+
+</section>
+
+
+</body>
+</html>

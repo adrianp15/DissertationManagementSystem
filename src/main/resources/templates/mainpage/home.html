@@ -16,7 +16,7 @@
 
 <body>
 <nav>
-    <a th:href="@{/index}" class="logo">
+    <a th:href="@{/home}" class="logo">
         Dissertation Management System
     </a>
 
@@ -31,7 +31,7 @@
 
                 <div style="display: flex">
                     <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
-                    <a href="#">My profile</a>
+                    <a th:href="@{/profile}">My Profile</a>
                 </div>
                 <div style="display: flex">
                     <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
@@ -44,7 +44,7 @@
 
 <section id="side-nav">
     <div class="sidenav">
-        <a href="#">Home</a>
+        <a th:href="@{/home}">Home</a>
         <a href="#">My Projects</a>
         <a href="#">Ideas</a>
         <a href="#">Forum</a>

@@ -57,4 +57,13 @@ public class User {
     @Column(name="account_type")
     private String accountType;
 
+    @Column(name="phone")
+    private String phone;
+
+    @Column(name="skype")
+    private String skype;
+
+    @Column(name="other_contact")
+    private String other_contact;
+
 }
