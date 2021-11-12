@@ -61,72 +61,91 @@
     </div>
 
     <div id="user-details">
-        <p class="details-header">Name</p>
-        <p th:text = "${user.firstName} + ' ' + ${user.lastName}"></p>
+        <div class="left-side">
+            <p class="details-header">Name</p>
+            <p th:text = "${user.firstName} + ' ' + ${user.lastName}"></p>
 
-        <div class="profile-input-boxes">
-            <form id="update-user" th:action="@{/update-user}" th:object="${user}" method="post" autocomplete="off">
+            <div class="profile-input-boxes">
+                <form id="update-user" th:action="@{/update-user}" th:object="${user}" method="post" autocomplete="off">
 
-                <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
-                   th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
-                    error</p>
+                    <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+                       th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+                        error</p>
 
-                <p class="details-header">Email</p>
-                <div class="input-group mb-3" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <p class="details-header">Email</p>
+                    <div class="input-group mb-3" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <input type="text" id="email" name="email" placeholder="Email"
+                               class="form-control" th:field="*{email}"/>
                     </div>
-                    <input type="text" id="email" name="email" placeholder="Email"
-                           class="form-control" th:field="*{email}"/>
-                </div>
-                <p class="error-message"
-                   th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
-                    error</p>
+                    <p class="error-message"
+                       th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
+                        error</p>
 
-                <p class="details-header">Password</p>
-                <div class="input-group mb-3" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <p class="details-header">Password</p>
+                    <div class="input-group mb-3" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <input type="password" placeholder="Type your new password"
+                               id="password" name="password" class="form-control" th:field="*{password}"/>
                     </div>
-                    <input type="password" placeholder="Type your new password"
-                           id="password" name="password" class="form-control" th:field="*{password}"/>
-                </div>
-                <p class="error-message"
-                   th:each="error : ${#fields.errors('password')}"
-                   th:text="${error}">Validation error</p>
+                    <p class="error-message"
+                       th:each="error : ${#fields.errors('password')}"
+                       th:text="${error}">Validation error</p>
 
-                <p class="details-header">Phone</p>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <p class="details-header">Phone</p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        </div>
+                        <input type="text" id="phone" name="phone" placeholder="Phone"
+                               class="form-control" th:field="*{phone}"/>
                     </div>
-                    <input type="text" id="phone" name="phone" placeholder="Phone"
-                           class="form-control" th:field="*{phone}"/>
-                </div>
 
-                <p class="details-header">Skype</p>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fab fa-skype"></i></span>
+                    <p class="details-header">Skype</p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fab fa-skype"></i></span>
+                        </div>
+                        <input type="text" id="skype" name="skype" placeholder="Skype"
+                               class="form-control" th:field="*{skype}"/>
                     </div>
-                    <input type="text" id="skype" name="skype" placeholder="Skype"
-                           class="form-control" th:field="*{skype}"/>
-                </div>
 
-                <p class="details-header">Other contact information</p>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <p class="details-header">Other contact information</p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <input type="text" id="other_contact" name="other_contact" placeholder="Other contact information"
+                               class="form-control" th:field="*{other_contact}" />
                     </div>
-                    <input type="text" id="other_contact" name="other_contact" placeholder="Other contact information"
-                           class="form-control" th:field="*{other_contact}" />
-                </div>
 
-                <button type="submit" class="save-button">Save</button>
-            </form>
+                    <button type="submit" class="save-button">Save</button>
+                </form>
+            </div>
         </div>
 
+        <div class="right-side">
+            <p class="details-header">Profile photo</p>
+            <div class="profile-image-container">
+                <img th:src="'/get/image/' + ${user.userName}" />
+            </div>
+            <form th:action="@{/upload/image}"
+                   method="post"
+                  enctype="multipart/form-data">
+                <div>
+                    <input type="file" name="image" accept="image/png, image/jpeg" />
+                </div>
+                <button type="submit" class="save-button">Upload</button>
+
+            </form>
+        </div>
     </div>
+
+
 
 </section>
 
