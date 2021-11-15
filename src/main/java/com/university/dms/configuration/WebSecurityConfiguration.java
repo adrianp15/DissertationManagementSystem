@@ -47,7 +47,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/templates",
                         "/index",
-                        "/").permitAll()
+                        "/",
+                        "/error").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers(loginPage).permitAll()
                 .antMatchers("/registration").permitAll()

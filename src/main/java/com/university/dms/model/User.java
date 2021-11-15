@@ -55,7 +55,8 @@ public class User {
     private Set<Role> roles;
 
     @Column(name="account_type")
-    private String accountType;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     @Column(name="phone")
     private String phone;

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{../css/style.css}">
+    <link rel="stylesheet" th:href="@{../css/home.css}">
+    <link rel="stylesheet" th:href="@{../css/profile.css}">
+    <title>Dissertation Management System</title>
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${currentUser.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section id="side-nav">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a href="#">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section class="page-content">
+    <div id="page-top">
+        <h1 class="profile-page-title">User profile</h1>
+        <hr class="horizontal_line">
+    </div>
+
+    <div class="content">
+        <div class="left-side">
+            <p class="details-header">Name</p>
+            <p th:text="${user.firstName} + ' ' + ${user.lastName}"></p>
+
+            <p class="details-header">Email</p>
+            <p th:text="${user.email}"></p>
+
+            <p class="details-header">Username</p>
+            <p th:text="${user.userName}"></p>
+
+            <p class="details-header">Phone</p>
+            <p th:text="${user.phone} == null ? 'Empty' : ${user.phone}"></p>
+
+            <p class="details-header">Skype</p>
+            <p th:text="${user.skype} == null ? 'Empty' : ${user.skype}"></p>
+
+            <p class="details-header">Other contact</p>
+            <p th:text="${user.other_contact} == null ? 'Empty' : ${user.other_contact}"></p>
+
+
+        </div>
+
+        <div class="right-side">
+            <p class="details-header">Profile photo</p>
+            <div class="profile-image-container" style="height: 400px">
+                <img th:src="'/get/image/' + ${user.userName}" style="max-height: 350px"/>
+            </div>
+
+            <form id="update-user" th:action="@{/coordinatorupdateuser}" th:object="${user}" method="post"
+                  autocomplete="off">
+
+                <p class="details-header">Account type</p>
+                <select class="form-control" id="accountType" name="accountType">
+                    <option th:each="accountType : ${T(com.university.dms.model.AccountType).values()}"
+                            th:value="${accountType}"
+                            th:text="${accountType}"
+                            th:selected="${accountType==user.accountType}"
+                    />
+                </select>
+
+                <p class="details-header">Account enabled</p>
+                <select class="form-control" id="active" name="active">
+                    <option th:each="accEnabledOption : ${accountEnabledOptions}"
+                            th:value="${accEnabledOption.getValue()}"
+                            th:text="${accEnabledOption.getValue()}"
+                            th:selected="${accEnabledOption.getKey()==user.active}"
+                    />
+                </select>
+
+                <input type="text" id="email" name="email" placeholder="Email"
+                       th:field="*{email}" style="visibility: hidden"/>
+
+                <button type="submit" class="coordinator-update-user-button">Update user details</button>
+            </form>
+
+        </div>
+    </div>
+
+
+</section>
+
+
+</body>
+</html>

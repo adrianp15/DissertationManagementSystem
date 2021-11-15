@@ -1,6 +1,5 @@
-package com.university.dms.controller;
+package com.university.dms.controller.user;
 
-import com.university.dms.model.Role;
 import com.university.dms.model.User;
 import com.university.dms.repository.RoleRepository;
 import com.university.dms.service.UserService;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class LoginController {
@@ -36,11 +33,12 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
 
-        ArrayList<String> accTypes = new ArrayList<>();
-        accTypes.add("Student");
-        accTypes.add("Supervisor");
+//        ArrayList<String> accTypes = new ArrayList<>();
+//        accTypes.add("Student");
+//        accTypes.add("Supervisor");
+//
+//        modelAndView.addObject("accTypes", accTypes);
 
-        modelAndView.addObject("accTypes", accTypes);
         modelAndView.addObject("user", user);
         modelAndView.setViewName("/authentication/register");
         return modelAndView;
@@ -48,7 +46,6 @@ public class LoginController {
 
     @PostMapping(value = "/registration")
     public String createNewUser(@Valid User user, BindingResult bindingResult) {
-        //ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByUserName(user.getUserName());
         if (userExists != null) {
             bindingResult

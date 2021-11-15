@@ -42,7 +42,7 @@
     </div>
 </nav>
 
-<section id="side-nav">
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
     <div class="sidenav">
         <a th:href="@{/home}">Home</a>
         <a href="#">My Projects</a>
@@ -53,30 +53,40 @@
     </div>
 </section>
 
-<section id="page-content">
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a href="#">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section class="page-content">
     <div class="boxes-container">
         <div class="box">
-            <i class="fas fa-book-open fa-7x"></i><br>
+            <i class="fas fa-book-open fa-5x"></i><br>
             <a th:href="@{/#}">MY PROJECTS</a>
         </div>
 
         <div class="box">
-            <i class="fas fa-lightbulb fa-7x"></i><br>
+            <i class="fas fa-lightbulb fa-5x"></i><br>
             <a th:href="@{/#}">IDEAS</a>
         </div>
 
         <div class="box">
-            <i class="fab fa-stack-exchange fa-7x"></i><br>
+            <i class="fab fa-stack-exchange fa-5x"></i><br>
             <a th:href="@{/#}">FORUM</a>
         </div>
 
         <div class="box">
-            <i class="fas fa-bell fa-7x"></i><br>
+            <i class="fas fa-bell fa-5x"></i><br>
             <a th:href="@{/#}">NOTIFICATIONS</a>
         </div>
 
         <div class="box">
-            <i class="fas fa-sticky-note fa-7x"></i><br>
+            <i class="fas fa-sticky-note fa-5x"></i><br>
             <a th:href="@{/#}">NOTES</a>
         </div>
     </div>

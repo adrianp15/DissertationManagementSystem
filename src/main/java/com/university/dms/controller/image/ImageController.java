@@ -37,16 +37,19 @@ public class ImageController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
 
-        // check if the user already has a profile photo and delete the old one
-        final Optional<Image> dbImage = imageRepository.findByName(user.getUserName());
-        if(dbImage.isPresent()) {
-            imageRepository.deleteByName(user.getUserName());
-        }
+        if(!file.isEmpty()){
 
-        imageRepository.save(Image.builder()
-                .name(user.getUserName())
-                .type(file.getContentType())
-                .image(ImageUtility.compressImage(file.getBytes())).build());
+            // check if the user already has a profile photo and delete the old one
+            final Optional<Image> dbImage = imageRepository.findByName(user.getUserName());
+            if(dbImage.isPresent()) {
+                imageRepository.deleteByName(user.getUserName());
+            }
+
+            imageRepository.save(Image.builder()
+                    .name(user.getUserName())
+                    .type(file.getContentType())
+                    .image(ImageUtility.compressImage(file.getBytes())).build());
+        }
 
         URI uri = new URI("../profile");
         HttpHeaders httpHeaders = new HttpHeaders();
