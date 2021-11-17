@@ -1,6 +1,6 @@
-package com.university.dms.repository;
+package com.university.dms.repository.user;
 
-import com.university.dms.model.Role;
+import com.university.dms.model.user.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

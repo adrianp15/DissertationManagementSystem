@@ -1,6 +1,6 @@
-package com.university.dms.repository;
+package com.university.dms.repository.user;
 
-import com.university.dms.model.User;
+import com.university.dms.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

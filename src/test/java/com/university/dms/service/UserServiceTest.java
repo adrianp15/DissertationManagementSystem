@@ -1,8 +1,9 @@
 package com.university.dms.service;
 
-import com.university.dms.model.User;
-import com.university.dms.repository.RoleRepository;
-import com.university.dms.repository.UserRepository;
+import com.university.dms.model.user.User;
+import com.university.dms.repository.user.RoleRepository;
+import com.university.dms.repository.user.UserRepository;
+import com.university.dms.service.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

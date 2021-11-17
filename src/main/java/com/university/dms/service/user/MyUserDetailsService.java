@@ -1,7 +1,7 @@
-package com.university.dms.service;
+package com.university.dms.service.user;
 
-import com.university.dms.model.Role;
-import com.university.dms.model.User;
+import com.university.dms.model.user.Role;
+import com.university.dms.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

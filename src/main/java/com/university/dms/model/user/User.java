@@ -1,5 +1,6 @@
-package com.university.dms.model;
+package com.university.dms.model.user;
 
+import com.university.dms.model.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

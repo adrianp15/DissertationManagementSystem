@@ -1,8 +1,8 @@
 package com.university.dms.controller.user;
 
-import com.university.dms.model.User;
-import com.university.dms.repository.RoleRepository;
-import com.university.dms.service.UserService;
+import com.university.dms.model.user.User;
+import com.university.dms.repository.user.RoleRepository;
+import com.university.dms.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

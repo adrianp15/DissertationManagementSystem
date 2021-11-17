@@ -2,9 +2,9 @@ package com.university.dms.controller.image;
 
 import com.university.dms.Utils.ImageUtility;
 import com.university.dms.model.Image;
-import com.university.dms.model.User;
+import com.university.dms.model.user.User;
 import com.university.dms.repository.ImageRepository;
-import com.university.dms.service.UserService;
+import com.university.dms.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

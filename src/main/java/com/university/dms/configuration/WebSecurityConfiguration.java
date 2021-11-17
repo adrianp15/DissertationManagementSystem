@@ -1,6 +1,6 @@
 package com.university.dms.configuration;
 
-import com.university.dms.service.MyUserDetailsService;
+import com.university.dms.service.user.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

@@ -1,11 +1,7 @@
 package com.university.dms.Utils;
 
 import com.university.dms.model.AccountType;
-import com.university.dms.model.User;
-import com.university.dms.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.university.dms.model.user.User;
 
 public class UserUtils {
 

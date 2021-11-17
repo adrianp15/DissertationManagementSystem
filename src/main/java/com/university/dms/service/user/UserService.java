@@ -1,10 +1,10 @@
-package com.university.dms.service;
+package com.university.dms.service.user;
 
 import com.university.dms.model.AccountType;
-import com.university.dms.model.Role;
-import com.university.dms.model.User;
-import com.university.dms.repository.RoleRepository;
-import com.university.dms.repository.UserRepository;
+import com.university.dms.model.user.Role;
+import com.university.dms.model.user.User;
+import com.university.dms.repository.user.RoleRepository;
+import com.university.dms.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
