@@ -21,6 +21,7 @@
     text-decoration: none;
     color: white !important;
     display: inline-block;
+    float: right;
 }
 
 .no-project-buttons-container {
@@ -42,6 +43,25 @@
     justify-content: space-between;
 }
 
+.preferred-project-label {
+    padding: 5px;
+    background-color: #07d007;
+    color: white !important;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.set-preferred-project-button {
+    padding: 5px;
+    background-color: rgba(215, 27, 27, 0.75);
+    text-decoration: none !important;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block;
+}
+
 /* SUBMISSION FORM */
 .submission-form-container {
     padding: 30px;
@@ -52,4 +72,6 @@
 .submission-form-container h4 {
     margin-top: 15px;
 }
+
+
 

@@ -13,10 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -35,6 +37,8 @@ public class StudentProjectController {
         User user = userService.findUserByUserName(auth.getName());
 
         List<Project> studentProjects = projectService.getCurrentStudentProjects(user);
+        studentProjects.sort((a, b) -> Boolean.compare(a.getPreferredOption(), b.getPreferredOption()));
+        Collections.reverse(studentProjects);
 
         model.addAttribute("user", user);
         model.addAttribute("studentProjects", studentProjects);
@@ -79,11 +83,26 @@ public class StudentProjectController {
             project.setStartDate(LocalDate.now());
             project.setStudent(user);
             project.setProjectStatus(ProjectStatus.SUGGESTION_SUBMITTED);
+            project.setPreferredOption(false);
 
             projectService.saveProject(project);
         }
 
         return "redirect:/student-my-projects";
     }
+
+    @RequestMapping(value="/set-as-preffered-option/{id}")
+    public String setPreferredProject(Model model, @PathVariable("id") String id){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userService.findUserByUserName(auth.getName());
+
+        projectService.setPreferredProject(currentUser, Integer.parseInt(id));
+
+
+        return "redirect:/student-my-projects";
+
+    }
+
 
 }

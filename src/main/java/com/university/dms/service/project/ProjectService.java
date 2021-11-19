@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProjectService {
@@ -26,5 +27,21 @@ public class ProjectService {
         return projectRepository.findProjectByStudent(user);
     }
 
+    public void setPreferredProject(User user, Integer projectId){
+        List<Project> projects = projectRepository.findProjectByStudent(user);
 
+        for(Project project:projects) {
+            if(project.getPreferredOption()) {
+                project.setPreferredOption(false);
+                projectRepository.save(project);
+            }
+
+            if (Objects.equals(project.getId(), projectId)) {
+                project.setPreferredOption(true);
+                projectRepository.save(project);
+            }
+        }
+
+
+    }
 }

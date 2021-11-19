@@ -57,4 +57,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
 
+    @Column(name = "preferred_option")
+    private Boolean preferredOption;
+
 }

@@ -79,12 +79,17 @@
                 </div>
                 <div class="right-side">
                     <a href="#" class="projects-small-button">Select</a>
-<!--                    Use this when ready-->
-<!--                    <a th:href="'/projects/' + ${project.id}" class="projects-small-button"><i class="fas fa-plus"></i>Select</a>-->
+                    <!--                    Use this when the project page is ready-->
+                    <!--                    <a th:href="'/projects/' + ${project.id}" class="projects-small-button"><i class="fas fa-plus"></i>Select</a>-->
+                    <br>
+                    <a th:if="${project.preferredOption == true}" class="preferred-project-label" style="margin-top: 10px;">Preferred option</a>
+                    <a th:if="${project.preferredOption == false}" th:href="'/set-as-preffered-option/' + ${project.id}" class="set-preferred-project-button" style="margin-top: 10px;">Set as preferred option</a>
+
                 </div>
             </div>
 
-            <a th:href="@{/addproject}" class="projects-large-button" style="margin-top: 20px;"><i class="fas fa-plus"></i> Add project</a>
+            <a th:href="@{/addproject}" class="projects-large-button" style="margin-top: 20px;"><i
+                    class="fas fa-plus"></i> Add project</a>
         </div>
     </div>
 
