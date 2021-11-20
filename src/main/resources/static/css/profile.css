@@ -34,13 +34,13 @@
 
 .left-side {
     width: 45%;
-    float:left;
+    display: inline-block;
 }
 
 .right-side {
-    width: 45%;
-    float:right;
-    margin-right: 5%;
+    width: 40%;
+    display: inline-block;
+    margin: 0 5%;
 }
 
 .profile-image-container img {
