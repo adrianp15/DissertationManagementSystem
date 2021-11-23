@@ -34,12 +34,10 @@
 
 .left-side {
     width: 45%;
-    display: inline-block;
 }
 
 .right-side {
-    width: 40%;
-    display: inline-block;
+    width: 45%;
     margin: 0 5%;
 }
 

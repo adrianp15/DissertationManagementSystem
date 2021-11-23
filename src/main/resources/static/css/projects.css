@@ -74,4 +74,22 @@
 }
 
 
+/* COORDINATOR */
+
+.suggestion-wrapper {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.suggestion-wrapper h3 {
+    text-decoration: underline;
+}
+
+.suggestion-wrapper p {
+    min-height: 150px;
+}
+
+
+
 

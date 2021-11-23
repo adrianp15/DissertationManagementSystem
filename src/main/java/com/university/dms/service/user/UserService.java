@@ -87,4 +87,8 @@ public class UserService {
     public User findUserById(int id) {
         return userRepository.findUserById(id);
     }
+
+    public List<User> getSupervisors() {
+        return userRepository.findUserByAccountType(AccountType.SUPERVISOR);
+    }
 }

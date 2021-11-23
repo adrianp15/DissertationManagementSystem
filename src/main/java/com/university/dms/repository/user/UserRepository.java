@@ -1,5 +1,6 @@
 package com.university.dms.repository.user;
 
+import com.university.dms.model.AccountType;
 import com.university.dms.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     User findUserById(int id);
+
+    List<User> findUserByAccountType(AccountType accountType);
 
     @Query("FROM User u WHERE u.firstName LIKE %:firstName%")
     List<User> findByFirstNameLike(@Param("firstName") String firstName);

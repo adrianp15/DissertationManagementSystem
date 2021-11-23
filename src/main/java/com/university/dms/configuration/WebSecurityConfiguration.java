@@ -48,7 +48,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/templates",
                         "/index",
                         "/",
-                        "/error").permitAll()
+                        "/error",
+                        "/suggestions").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers(loginPage).permitAll()
                 .antMatchers("/registration").permitAll()

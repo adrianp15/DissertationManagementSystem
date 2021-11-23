@@ -82,6 +82,16 @@ nav {
     text-decoration: none;
 }
 
+.flex-separate-items {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-flex {
+    margin-left: 50px;
+    display: flex;
+}
+
 /*  HOME SHOWCASE */
 
 .container {
@@ -377,5 +387,41 @@ nav {
     margin: 1rem auto;
     text-decoration: none;
     float: left;
-
 }
+
+
+/* COORDINATOR PROJECTS */
+
+.projects-list {
+    width: 80vw !important;
+}
+
+.project-in-list-item {
+    width: 100%;
+    margin: 20px 0;
+    border: 2px solid black;
+}
+
+.project-box-top {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.project-box-bottom {
+    margin-left: 10px;
+}
+
+.project-box-bottom p {
+    font-size: 1.5rem;
+}
+
+.coordinator-confirm-supervisor-button {
+    border: none;
+    background: rgba(13, 110, 139, 0.75);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin: 1rem auto;
+    text-decoration: none;
+}
+

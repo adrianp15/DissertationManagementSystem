@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{../css/style.css}">
+    <link rel="stylesheet" th:href="@{../css/home.css}">
+    <link rel="stylesheet" th:href="@{../css/projects.css}">
+    <title>Dissertation Management System</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
+
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My Profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section>
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section class="page-content">
+    <div id="page-top">
+        <h1 class="section-page-title" style="display: inline-block !important;">All projects</h1>
+
+
+        <hr class="horizontal_line">
+    </div>
+    <div class="content">
+
+        <form id="search-user" th:action="@{/searchuserinprojectspage}" method="post" autocomplete="off" style="min-width: 20%; width: 30%; display: inline-block">
+            <div class="user-search-bar">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                    <input type="text" id="search_data" name="search_data" placeholder="Type name, email, username"
+                           class="form-control"/>
+                </div>
+
+                <button type="submit" class="user-search-button">Search</button>
+            </div>
+        </form>
+
+        <form id="update-user" th:action="@{/coordinatorfilterprojects}" method="post" style="display: inline-block; margin-left: 10px; width: 50% ">
+
+            <select class="form-control" id="projectFilter" name="projectFilter"
+                    style="display:inline-block !important; margin-left: 10px; width: 50%;">
+                <option th:each="filter : ${projectFilters}"
+                        th:value="${filter}"
+                        th:text="${filter}"
+                />
+            </select>
+
+            <button type="submit" class="user-search-button" style="display: inline-block; margin-left: 10px">Filter</button>
+        </form>
+
+        <div class="projects-list">
+
+            <div class="project-in-list-item" th:each="user: ${allUsers}" th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT and user.active==true}">
+                <div class="project-box-top">
+                    <h4 th:text="${user.firstName} + ' ' + ${user.lastName}"></h4>
+<!--                    <a href="#" class="projects-small-button">Select</a>-->
+                </div>
+                <hr style="border: 1px solid black; margin-top: 0">
+
+                <div class="project-box-bottom" >
+<!--                <div class="project-box-bottom" th:each="project: ${allProjects}">-->
+<!--                    <p th:if="${project.student.id == user.id}" th:text="${projectStat.index + 1} + '. ' + ${project.suggestion.title}"></p>-->
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: 45%">Project title</th>
+                            <th style="width: 15%">Date submitted</th>
+                            <th style="width: 20%">Supervisor</th>
+                            <th style="width: 15%"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="project: ${allProjects}" th:if="${project.student.id == user.id}">
+                            <td class="flex-separate-items">
+                                <p th:text="${project.suggestion.title}" ></p>
+                                <p th:if="${project.preferredOption == true}" class="preferred-project-label" style="font-size: 0.8rem">Preferred option</p>
+                            </td>
+                            <td th:text="${project.startDate}" />
+                            <td th:if="${project.supervisor == null}">Not assigned</td>
+                            <td th:if="${project.supervisor != null}" th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}" />
+                            <td ><a th:href="'/suggestions/' + ${project.id}">View submission</a></td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+</body>
+</html>
+
+

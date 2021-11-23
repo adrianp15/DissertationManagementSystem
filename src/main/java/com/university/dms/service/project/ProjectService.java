@@ -1,6 +1,7 @@
 package com.university.dms.service.project;
 
 import com.university.dms.model.project.Project;
+import com.university.dms.model.project.ProjectStatus;
 import com.university.dms.model.user.User;
 import com.university.dms.repository.project.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,31 @@ public class ProjectService {
                 projectRepository.save(project);
             }
         }
-
-
     }
+
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    public Project findProjectById(Integer id) {
+        return projectRepository.findProjectById(id);
+    }
+
+    public void updateProject(Project project) {
+        projectRepository.save(project);
+    }
+
+    public void setSupervisor(Project project) {
+        List<Project> studentProjects = projectRepository.findProjectByStudent(project.getStudent());
+        for(Project project1: studentProjects) {
+            if (Objects.equals(project1.getId(), project.getId())) {
+                projectRepository.save(project);
+            } else {
+                project1.setSupervisor(null);
+                project1.setProjectStatus(ProjectStatus.SUGGESTION_REJECTED);
+                projectRepository.save(project1);
+            }
+        }
+    }
+
 }

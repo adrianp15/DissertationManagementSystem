@@ -35,6 +35,10 @@ public class Suggestion {
     @Column(name = "lsep", columnDefinition = "TEXT")
     private String lsep;
 
+    @Column(name = "feedback", columnDefinition = "TEXT")
+    private String feedback;
+
+
 
 
 }
