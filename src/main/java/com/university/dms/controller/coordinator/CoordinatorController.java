@@ -4,8 +4,6 @@ import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProjectStatus;
 import com.university.dms.model.project.Suggestion;
 import com.university.dms.model.user.User;
-import com.university.dms.model.utils.ProjectAndSupervisorWrapper;
-import com.university.dms.model.utils.StringWrapper;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.project.SuggestionService;
 import com.university.dms.service.user.UserService;
@@ -18,10 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,7 +41,6 @@ public class CoordinatorController {
         List<User> users = userService.findAll();
         users = users.stream().limit(10).collect(Collectors.toList());
 
-        StringWrapper search_data = new StringWrapper();
 
         model.addAttribute("user", user);
         model.addAttribute("users", users);
@@ -119,24 +113,6 @@ public class CoordinatorController {
         return "coordinator/coordinatorviewallprojects";
     }
 
-    @GetMapping("/suggestions/{id}")
-    public String viewSuggestion(Model model, @PathVariable("id") String projectId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userService.findUserByUserName(auth.getName());
-
-        Project project = projectService.findProjectById(Integer.parseInt(projectId));
-        List<User> supervisors = userService.getSupervisors();
-        Suggestion suggestion = new Suggestion();
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("project", project);
-        model.addAttribute("supervisors", supervisors);
-        model.addAttribute("suggestion", project.getSuggestion());
-
-
-        return "coordinator/coordinatorviewsuggestion";
-    }
-
 
     @GetMapping (value = "/assignsupervisor/{projectid}/{supervisorid}")
     public String coordinatorAssignSupervisor(@PathVariable("projectid") String projectid,
@@ -163,6 +139,31 @@ public class CoordinatorController {
         suggestionService.saveSuggestion(suggestion1);
 
         return "redirect:/coordinatorviewprojects/";
+    }
+
+    @PostMapping("/searchforproject")
+    public String searchProject(@RequestParam String search_data, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userService.findUserByUserName(auth.getName());
+        List<Project> allProjects = projectService.searchProject(search_data);
+
+        Set<User> allUsers = new HashSet<>();
+
+        for (Project project:allProjects){
+            allUsers.add(project.getStudent());
+        }
+
+        HashMap<Integer, String> filter = new HashMap<>();
+        filter.put(0, "Pending approval");
+        filter.put(1, "Have supervisors assigned");
+
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("projectFilters", filter);
+        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("allProjects", allProjects);
+        return "coordinator/coordinatorviewallprojects";
     }
 
 }

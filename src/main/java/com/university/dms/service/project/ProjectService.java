@@ -7,8 +7,7 @@ import com.university.dms.repository.project.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ProjectService {
@@ -67,6 +66,37 @@ public class ProjectService {
                 projectRepository.save(project1);
             }
         }
+    }
+
+    public List<Project> searchProject(String keyword) {
+        Set<Project> projects = new HashSet<>();
+
+        List<Project> results = projectRepository.findBySuggestion_Title(keyword);
+
+        if(results != null) {
+            projects.addAll(results);
+        }
+
+        results = projectRepository.findByStudent_FirstName(keyword);
+
+        if(results != null) {
+            projects.addAll(results);
+        }
+
+        results = projectRepository.findByStudent_LastName(keyword);
+
+        if(results != null) {
+            projects.addAll(results);
+        }
+
+        results = projectRepository.findByStudent_email(keyword);
+
+        if(results != null) {
+            projects.addAll(results);
+        }
+        results = new ArrayList<>(projects);
+
+        return results;
     }
 
 }

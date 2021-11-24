@@ -101,7 +101,18 @@ public class StudentProjectController {
 
 
         return "redirect:/student-my-projects";
+    }
 
+    @GetMapping(value = "/projects/{id}")
+    public String viewProject(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        model.addAttribute("user", user);
+        model.addAttribute("project", project);
+
+        return "student/projectpage";
     }
 
 
