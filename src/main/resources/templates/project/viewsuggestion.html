@@ -149,7 +149,8 @@
         <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" class="right-side">
             <div style="display:block; margin-top: 20px">
                 <h4>Allocated Supervisor</h4>
-                <p th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"></p>
+                <p th:if="${project.supervisor != null}" th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"></p>
+                <p th:if="${project.supervisor == null}">Not assigned</p>
             </div>
             <br>
             <div style="display:block; border: 1px solid black; padding: 5px">

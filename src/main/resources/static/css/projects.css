@@ -100,7 +100,7 @@
 }
 
 .project-details-box {
-    padding: 20px;
+    padding: 10px;
     display: flex;
     justify-content: space-around;
     width: 90%;
@@ -129,5 +129,26 @@
     background-color: #37DC71E2;
 }
 
+.project-phases-container {
+    padding: 10px;
+    width: 90%;
+    border: 1px solid black;
+    margin-top: 20px;
+}
+
+.project-phase-title {
+    background-color: black;
+    color: white;
+    padding: 5px;
+}
+
+.project-phase-wrap {
+    padding: 7px;
+    border: 1px solid black !important;
+}
+
+.table-align-right {
+    text-align: right;
+}
 
 
