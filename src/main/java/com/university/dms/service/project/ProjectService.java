@@ -108,4 +108,8 @@ public class ProjectService {
         proposalRepository.save(proposal);
     }
 
+    public Proposal findProposalById(Integer id){
+        return proposalRepository.findProposalById(id);
+    }
+
 }

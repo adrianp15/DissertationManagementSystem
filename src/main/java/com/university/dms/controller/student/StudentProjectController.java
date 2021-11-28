@@ -156,13 +156,12 @@ public class StudentProjectController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
         Project project = projectService.findProjectById(Integer.parseInt(id));
-        Proposal proposal = new Proposal();
         ProposalWrapper proposalWrapper = new ProposalWrapper();
         proposalWrapper.setProjectId(Integer.parseInt(id));
 
         model.addAttribute("user", user);
         model.addAttribute("project", project);
-        model.addAttribute("proposal", proposal);
+        model.addAttribute("proposal", project.getProposal());
         model.addAttribute("proposalWrapper", proposalWrapper);
 
         return "project/proposalpage";
@@ -207,6 +206,7 @@ public class StudentProjectController {
 
             Proposal proposal = new Proposal();
             proposal.setDocument(result);
+            proposal.setFeedback("");
             projectService.saveProposal(proposal);
 
             project.setProposal(proposal);
