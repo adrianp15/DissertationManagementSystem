@@ -25,6 +25,9 @@ public class Project {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "start_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;

@@ -2,8 +2,10 @@ package com.university.dms.service.project;
 
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProjectStatus;
+import com.university.dms.model.project.Proposal;
 import com.university.dms.model.user.User;
 import com.university.dms.repository.project.ProjectRepository;
+import com.university.dms.repository.project.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,12 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
+    private final ProposalRepository proposalRepository;
+
     @Autowired
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository) {
         this.projectRepository = projectRepository;
+        this.proposalRepository = proposalRepository;
     }
 
     public void saveProject(Project project) {
@@ -97,6 +102,10 @@ public class ProjectService {
         results = new ArrayList<>(projects);
 
         return results;
+    }
+
+    public void saveProposal(Proposal proposal) {
+        proposalRepository.save(proposal);
     }
 
 }

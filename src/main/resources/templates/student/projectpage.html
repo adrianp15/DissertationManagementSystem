@@ -81,8 +81,21 @@
         <div class="project-details-box">
             <div class="box-in-project-details">
                 <h4>Project title</h4>
-                <p th:text="${project.suggestion.title}"></p>
-                <a th:href="'/suggestions/' + ${project.id}">View suggestion form</a>
+                <p id="projecttitle" th:text="${project.title}"></p>
+
+                <form class="hidden" id="change-project-title" th:action="@{/change-project-title}" th:object="${project}" method="post" autocomplete="off"
+                      style="min-width: 20%;">
+                    <input type="text" id="title" name="title"
+                           th:value="${project.title}"
+                           class="form-control"/>
+                    <input type="text" id="id" name="id" placeholder="Id" th:field="*{id}" style="display: none"/>
+
+                    <button id="saveprojectitle" type="submit" class="btn" style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px">Save</button>
+                    <a id="cancelsaveprojectitle" class="btn" style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px; color: white">Cancel</a>
+                </form>
+
+                <button id="editprojectitle" class="btn" style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px">Edit project title</button>
+                <a class="btn" style="margin-top: 10px; margin-bottom: 10px; padding: 8px 12px" th:href="'/suggestions/' + ${project.id}">View suggestion form</a>
 
             </div>
 
@@ -116,7 +129,7 @@
                     </tr>
                     <tr>
                         <td>Proposal submission</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td class="table-align-right"><a th:href="'/projects/' + ${project.id} + '/proposal-page'">Select</a></td>
                     </tr>
                     <tr>
                         <td>Proposal approved</td>
@@ -222,6 +235,22 @@
                 $('#discussionbutton').removeClass('selected-button');
             }
         });
+
+        $('#editprojectitle').click(function () {
+            if ($('#change-project-title').hasClass('hidden')) {
+                $('#change-project-title').removeClass('hidden');
+                $('#projecttitle').addClass('hidden');
+            }
+        });
+
+        $('#cancelsaveprojectitle').click(function () {
+            if (!$('#change-project-title').hasClass('hidden')) {
+                $('#change-project-title').addClass('hidden');
+                $('#projecttitle').removeClass('hidden');
+            }
+        });
+
+
     });
 </script>
 </html>
