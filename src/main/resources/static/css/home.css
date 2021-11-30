@@ -84,7 +84,9 @@
 
 .dropdown-content a:hover {background-color: #ddd;}
 
-.dropdownmenu:hover .user-name-container .dropdown-content {display: block;}
+.dropdownmenu:hover .user-name-container .dropdown-content {
+    display: block;
+}
 
 
 /* HOMEPAGE BOXES */
@@ -95,12 +97,12 @@
 }
 
 .box {
-    border: 3px solid black;
+    border: 2px solid black;
     border-radius: 10px;
     text-align: center;
     line-height: 75px;
-    width: 380px;
+    width: 300px;
     font-size: 25px;
-    margin: 15px 30px;
-    padding: 20px 70px;
+    margin: 15px 20px;
+    padding: 10px 35px;
 }

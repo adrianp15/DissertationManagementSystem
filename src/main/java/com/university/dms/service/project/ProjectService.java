@@ -104,12 +104,37 @@ public class ProjectService {
         return results;
     }
 
+    public boolean hasUserAnyProject(User user) {
+        List<Project> projects = projectRepository.findAll();
+
+        for(Project project : projects){
+            if(Objects.equals(project.getStudent(), user)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void saveProposal(Proposal proposal) {
         proposalRepository.save(proposal);
     }
 
     public Proposal findProposalById(Integer id){
         return proposalRepository.findProposalById(id);
+    }
+
+    public List<Project> getSupervisorProjects(User user) {
+        List<Project> allProjects = projectRepository.findAll();
+        List<Project> supervisorProjects = new ArrayList<>();
+
+        for(Project project:allProjects) {
+            if(Objects.equals(project.getSupervisor(), user )){
+                supervisorProjects.add(project);
+            }
+        }
+
+        return supervisorProjects;
+
     }
 
 }

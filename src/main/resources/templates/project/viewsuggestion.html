@@ -146,7 +146,7 @@
         </div>
 
 <!--        DISPLAY FOR STUDENT -->
-        <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" class="right-side">
+        <div th:if="${user.accountType ne T(com.university.dms.model.AccountType).COORDINATOR}" class="right-side">
             <div style="display:block; margin-top: 20px">
                 <h4>Allocated Supervisor</h4>
                 <p th:if="${project.supervisor != null}" th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"></p>

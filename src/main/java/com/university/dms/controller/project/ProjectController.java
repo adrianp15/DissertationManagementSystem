@@ -3,6 +3,7 @@ package com.university.dms.controller.project;
 import com.university.dms.Utils.ImageUtility;
 import com.university.dms.model.Image;
 import com.university.dms.model.project.Project;
+import com.university.dms.model.project.ProjectStatus;
 import com.university.dms.model.user.User;
 import com.university.dms.model.utils.ProposalWrapper;
 import com.university.dms.service.project.ProjectService;
@@ -61,6 +62,36 @@ public class ProjectController {
 
         return "project/viewsuggestion";
     }
+
+    @GetMapping(value = "/projects/{id}/{action}")
+    public String approveRejectProposal(Model model, @PathVariable("id") String id, @PathVariable("action") String action) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        switch (action){
+            case "approve":
+                project.setProjectStatus(ProjectStatus.PROPOSAL_APPROVED);
+                break;
+            case "reject":
+                project.setProjectStatus(ProjectStatus.PROPOSAL_REJECTED);
+                break;
+        }
+        projectService.saveProject(project);
+
+
+        ProposalWrapper proposalWrapper = new ProposalWrapper();
+        proposalWrapper.setProjectId(Integer.parseInt(id));
+
+        model.addAttribute("user", user);
+        model.addAttribute("project", project);
+        model.addAttribute("proposal", project.getProposal());
+        model.addAttribute("proposalWrapper", proposalWrapper);
+
+        return "project/proposalpage";
+    }
+
+
 
 
 }

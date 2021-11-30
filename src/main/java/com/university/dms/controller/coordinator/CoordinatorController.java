@@ -102,6 +102,7 @@ public class CoordinatorController {
         List<Project> allProjects = projectService.findAll();
 
         ArrayList<String> filter = new ArrayList<>();
+        filter.add("All");
         filter.add("Pending approval");
         filter.add("Have supervisors assigned");
 
@@ -109,6 +110,46 @@ public class CoordinatorController {
         model.addAttribute("projectFilters", filter);
         model.addAttribute("allUsers", allUsers);
         model.addAttribute("allProjects", allProjects);
+        model.addAttribute("chosenFilter", "All");
+
+        return "coordinator/coordinatorviewallprojects";
+    }
+
+    @GetMapping(value = "/filterprojects/{filterid}")
+    public String filterProjects(@PathVariable("filterid") String chosenFilter, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userService.findUserByUserName(auth.getName());
+        List<User> allUsers = userService.findAll();
+        List<Project> allProjects = projectService.findAll();
+
+        List<Project> filteredProjects;
+
+        if(chosenFilter.equals("Pending approval")){
+            filteredProjects = allProjects.stream().filter(a -> a.getProjectStatus()
+                       .equals(ProjectStatus.SUGGESTION_SUBMITTED))
+                       .collect(Collectors.toList());
+        } else if(chosenFilter.equals("Have supervisors assigned")){
+            filteredProjects = allProjects.stream().filter(a -> a.getProjectStatus().equals(ProjectStatus.SUGGESTION_APPROVED) ||
+                                                                a.getProjectStatus().equals(ProjectStatus.PROPOSAL_SUBMITTED) ||
+                                                                a.getProjectStatus().equals(ProjectStatus.PROPOSAL_REJECTED) ||
+                                                                a.getProjectStatus().equals(ProjectStatus.PROPOSAL_APPROVED))
+
+                                                   .collect(Collectors.toList());
+        } else {
+            filteredProjects = allProjects;
+        }
+
+        ArrayList<String> filter = new ArrayList<>();
+        filter.add("All");
+        filter.add("Pending approval");
+        filter.add("Have supervisors assigned");
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("projectFilters", filter);
+        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("allProjects", filteredProjects);
+        model.addAttribute("chosenFilter", chosenFilter);
 
         return "coordinator/coordinatorviewallprojects";
     }
@@ -163,7 +204,10 @@ public class CoordinatorController {
         model.addAttribute("projectFilters", filter);
         model.addAttribute("allUsers", allUsers);
         model.addAttribute("allProjects", allProjects);
+        model.addAttribute("projectService", projectService);
         return "coordinator/coordinatorviewallprojects";
     }
+
+
 
 }

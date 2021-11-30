@@ -72,8 +72,7 @@
 <section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
     <div class="sidenav">
         <a th:href="@{/home}">Home</a>
-        <a href="#">Users</a>
-        <a href="#">Projects</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
         <a href="#">Ideas</a>
         <a href="#">Forum</a>
     </div>
@@ -92,12 +91,12 @@
 
         </div>
 
-        <!--        DISPLAY FOR COORDINATOR -->
+        <!--        DISPLAY FOR COORDINATOR AND SUPERVISOR-->
         <div th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT}" class="right-side">
             <div style="display:block;">
                 <form id="suggestion-feedback" th:action="@{/post-proposal-feedback}" th:object="${proposal}" method="post"
                       autocomplete="off">
-                    <h4>Feedback for proposal</h4>
+                    <h3 style="margin-top: 10px">Feedback for proposal</h3>
                     <div class="input-group">
                     <textarea type="text" id="feedback" name="feedback"
                               class="form-control" th:field="*{feedback}" th:value="${proposal.feedback}" style="height: 350px !important;"></textarea>
@@ -106,10 +105,13 @@
                     <input type="text" id="id" name="id" placeholder="Id" th:field="${project.id}" style="display: none"/>
 
                     <button type="submit" class="coordinator-confirm-supervisor-button">Post feedback</button>
+                    <a th:href="'/projects/' + ${project.id} + '/approve'" class="coordinator-confirm-supervisor-button">Approve proposal</a>
+                    <a th:href="'/projects/' + ${project.id} + '/reject'" class="coordinator-confirm-supervisor-button">Reject proposal</a>
                 </form>
+
             </div>
 
-            <a href="#" class="save-button">Go to project page</a>
+            <a  th:href="'/projects/' + ${project.id}" class="save-button">Go to project page</a>
 
         </div>
 

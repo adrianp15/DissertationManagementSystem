@@ -5,8 +5,6 @@ import com.cloudmersive.client.invoker.ApiClient;
 import com.cloudmersive.client.invoker.ApiException;
 import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
-import com.university.dms.Utils.ImageUtility;
-import com.university.dms.model.Image;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProjectStatus;
 import com.university.dms.model.project.Proposal;
@@ -23,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,16 +30,12 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 @Controller
 public class StudentProjectController {
@@ -133,14 +126,33 @@ public class StudentProjectController {
         User user = userService.findUserByUserName(auth.getName());
         Project project = projectService.findProjectById(Integer.parseInt(id));
 
+        List<ProjectStatus> allStatusesList = Arrays.asList(ProjectStatus.class.getEnumConstants());
+        List<ProjectStatus> currentProjectStatuses = new ArrayList<>();
+
+        for(ProjectStatus projectStatus:allStatusesList){
+            if(projectStatus==ProjectStatus.PROPOSAL_REJECTED){
+                if(project.getProjectStatus()==ProjectStatus.PROPOSAL_REJECTED){
+                    currentProjectStatuses.add(projectStatus);
+                    break;
+                }
+            }
+
+            if(projectStatus==project.getProjectStatus()){
+                currentProjectStatuses.add(projectStatus);
+                break;
+            }
+            currentProjectStatuses.add(projectStatus);
+        }
+
         model.addAttribute("user", user);
         model.addAttribute("project", project);
+        model.addAttribute("currentProjectStatuses", currentProjectStatuses);
 
-        return "student/projectpage";
+        return "project/projectpage";
     }
 
     @PostMapping("/change-project-title")
-    public String postFeedbackOnSuggestion(@Valid Project project, Model model) {
+    public String changeProjectTitle(@Valid Project project, Model model) {
 
         Project project1 = projectService.findProjectById(project.getId());
 
@@ -168,7 +180,7 @@ public class StudentProjectController {
     }
 
     @PostMapping("/upload/proposal")
-    public String uploadImage(@Valid ProposalWrapper proposalWrapper)
+    public String uploadProposal(@Valid ProposalWrapper proposalWrapper)
             throws IOException, URISyntaxException {
 
         Project project = projectService.findProjectById(proposalWrapper.getProjectId());

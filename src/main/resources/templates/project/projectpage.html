@@ -55,7 +55,7 @@
     </div>
 </nav>
 
-<section id="side-nav-student">
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
     <div class="sidenav">
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/student-my-projects}">My Projects</a>
@@ -63,6 +63,15 @@
         <a href="#">Forum</a>
         <a href="#">Notifications</a>
         <a href="#">Notes</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
     </div>
 </section>
 
@@ -118,22 +127,40 @@
             </div>
         </div>
 
+        <!--        PROJECT PHASES - SUGGESTION SUBMITTED-->
+        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.ProjectStatus).SUGGESTION_SUBMITTED}" class="project-phases-container" id="project-phases">
+            <h2>A suggestion for this project has been submitted.</h2>
+            <h2>You have to wait for approval.</h2>
+        </div>
+
+        <!--        PROJECT PHASES - PROJECT REJECTED-->
+        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.ProjectStatus).SUGGESTION_REJECTED}" class="project-phases-container" id="project-phases">
+            <h2>The suggestion for this project has been rejected.</h2>
+            <h2>You have to continue working on the project that has been approved.</h2>
+        </div>
+
         <!--        PROJECT PHASES-->
-        <div class="project-phases-container" id="project-phases">
+        <div th:if="${project.projectStatus ne T(com.university.dms.model.project.ProjectStatus).SUGGESTION_SUBMITTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.ProjectStatus).SUGGESTION_REJECTED}" class="project-phases-container" id="project-phases">
             <div class="project-phase-wrap">
                 <h3 class="project-phase-title">Phase 1</h3>
                 <table class="table">
                     <tr>
-                        <td>Supervisor allocation</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Supervisor allocation <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).SUGGESTION_APPROVED)}" class="fas fa-check-circle fa-lg" style="color: green"></i>
+                        </td>
+                        <td class="table-align-right"></td>
                     </tr>
                     <tr>
-                        <td>Proposal submission</td>
+                        <td>Proposal submission <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_SUBMITTED)}" class="fas fa-check-circle fa-lg" style="color: green"></i></td>
                         <td class="table-align-right"><a th:href="'/projects/' + ${project.id} + '/proposal-page'">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Proposal approved</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>Proposal approval
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_APPROVED)}" class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_REJECTED) && !currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_APPROVED)}" class="fas fa-times-circle fa-lg" style="color: red"></i>
+                        </td>
+                        <td class="table-align-right"></td>
                     </tr>
                 </table>
             </div>

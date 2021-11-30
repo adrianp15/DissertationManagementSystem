@@ -64,6 +64,15 @@
     </div>
 </section>
 
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
 
 <section class="page-content">
     <div id="page-top">
@@ -72,7 +81,7 @@
     </div>
 
     <div class="content">
-        <div class="left-side">
+        <div class="left-side" style="display: inline-block">
             <p class="details-header">Name</p>
             <p th:text = "${user.firstName} + ' ' + ${user.lastName}"></p>
 
@@ -139,7 +148,7 @@
             </div>
         </div>
 
-        <div class="right-side">
+        <div class="right-side" style="display: inline-block; width: 40%">
             <p class="details-header">Profile photo</p>
             <div class="profile-image-container">
                 <img th:src="'/get/image/' + ${user.userName}" />
