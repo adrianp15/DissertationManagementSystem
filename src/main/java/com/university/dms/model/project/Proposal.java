@@ -1,5 +1,6 @@
 package com.university.dms.model.project;
 
+import com.university.dms.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,11 @@ public class Proposal {
     @Column(name = "document", nullable = false, columnDefinition = "LONGBLOB")
     private byte[] document;
 
-    @Column(name = "feedback", columnDefinition = "TEXT")
-    private String feedback;
+    @Column(name = "grade")
+    private String grade;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "marking")
+    private ProposalMarking proposalMarking;
 
 }

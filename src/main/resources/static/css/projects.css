@@ -150,4 +150,23 @@
     text-align: right;
 }
 
+/* PROPOSAL */
 
+.marking-box{
+    margin-top: 15px;
+}
+
+.marking-box-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.marking-box-mark-header input, h5 {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 0;
+}

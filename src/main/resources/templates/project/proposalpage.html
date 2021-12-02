@@ -82,70 +82,318 @@
     <div class="content-flex">
         <div class="left-side">
             <h3 style="margin: 10px 0 0 10px" th:text="${project.title}"></h3>
-            <div style="border: 1px solid black; margin: 10px; width: 90%; height: 90%">
-                <div>
-                    <iframe th:if="${project.proposal != null}" th:src="'/get/proposal/' + ${project.id}" style="width:100%;height:700px;" type='application/pdf'></iframe>
-                    <h4 th:if="${project.proposal == null}">No proposal submitted</h4>
-                </div>
+            <div style="border: 1px solid black; margin: 10px; height: 90%">
+                <iframe th:if="${project.proposal != null}" th:src="'/get/proposal/' + ${project.id}"
+                        style="width:100%;height:100%;" type='application/pdf'></iframe>
+                <h4 th:if="${project.proposal == null}">No proposal submitted</h4>
+
             </div>
 
         </div>
 
-        <!--        DISPLAY FOR COORDINATOR AND SUPERVISOR-->
-        <div th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT}" class="right-side">
-            <div style="display:block;">
-                <form id="suggestion-feedback" th:action="@{/post-proposal-feedback}" th:object="${proposal}" method="post"
-                      autocomplete="off">
-                    <h3 style="margin-top: 10px">Feedback for proposal</h3>
-                    <div class="input-group">
-                    <textarea type="text" id="feedback" name="feedback"
-                              class="form-control" th:field="*{feedback}" th:value="${proposal.feedback}" style="height: 350px !important;"></textarea>
-                    </div>
 
-                    <input type="text" id="id" name="id" placeholder="Id" th:field="${project.id}" style="display: none"/>
-
-                    <button type="submit" class="coordinator-confirm-supervisor-button">Post feedback</button>
-                    <a th:href="'/projects/' + ${project.id} + '/approve'" class="coordinator-confirm-supervisor-button">Approve proposal</a>
-                    <a th:href="'/projects/' + ${project.id} + '/reject'" class="coordinator-confirm-supervisor-button">Reject proposal</a>
-                </form>
-
-            </div>
-
-            <a  th:href="'/projects/' + ${project.id}" class="save-button">Go to project page</a>
-
-        </div>
-
-        <!--        DISPLAY FOR STUDENT -->
-        <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" class="right-side">
-            <div style="display:block; margin-top: 20px">
+        <div class="right-side">
+            <div th:if="${(user.accountType eq T(com.university.dms.model.AccountType).STUDENT) && (proposalMarking.introductionMark == null)}"
+                 style="display:block; margin-top: 20px">
                 <h4>Select file to submit</h4>
                 <form th:action="@{/upload/proposal}" th:object="${proposalWrapper}"
                       method="post"
                       enctype="multipart/form-data">
                     <div>
-                        <input type="file" name="document" accept=".docx,.pdf" />
+                        <input type="file" name="document" accept=".docx,.pdf"/>
                     </div>
 
                     <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
 
                     <button type="submit" class="save-button">Submit file</button>
                 </form>
-
-            </div>
-            <br>
-            <div style="display:block;">
-                <h4>Feedback for proposal</h4>
-                <p th:if="${project.proposal == null || project.proposal.feedback.isEmpty()}">No feedback yet </p>
-                <p th:if="${project.proposal != null && !project.proposal.feedback.isEmpty()}" th:text="${project.proposal.feedback}"></p>
             </div>
 
-            <a th:href="'/projects/' + ${project.id}" class="save-button">Go to project page</a>
+            <div style="display:block;" th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR} AND
+                                               ${T(com.university.dms.Utils.ProjectUtils).isProposalNotGraded(proposalMarking) == true}">
+                <form id="proposal-marking" th:action="@{/post-proposal-marking}" th:object="${proposalMarking}"
+                      method="post"
+                      autocomplete="off">
+                    <h3 style="margin-top: 10px">Proposal marking</h3>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Introduction</h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message" th:each="error : ${#fields.errors('introductionMark')}"
+                                   th:text="${error}">Validation error</p>
+                                <h5>Mark (max 20) </h5>
+                                <input id="introductionMark"
+                                       name="introductionMark" type="number" max="20" min="0"
+                                       th:field="*{introductionMark}" th:value="${proposalMarking.introductionMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="introduction" name="introduction"
+                                  class="form-control" th:field="*{introduction}"
+                                  th:value="${proposalMarking.introduction}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Aims & Objectives</h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message" th:each="error : ${#fields.errors('aimsObjectivesMark')}"
+                                   th:text="${error}">Validation error</p>
+                                <h5>Mark (max 20) </h5>
+                                <input id="aimsObjectivesMark" name="aimsObjectivesMark" type="number" max="20" min="0"
+                                       th:field="*{aimsObjectivesMark}"
+                                       th:value="${proposalMarking.aimsObjectivesMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="aimsObjectives" name="aimsObjectives"
+                                  class="form-control" th:field="*{aimsObjectives}"
+                                  th:value="${proposalMarking.aimsObjectives}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Methodology</h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message" th:each="error : ${#fields.errors('methodologyMark')}"
+                                   th:text="${error}">Validation error</p>
+                                <h5>Mark (max 20) </h5>
+                                <input id="methodologyMark" name="methodologyMark" type="number" max="20" min="0"
+                                       th:field="*{methodologyMark}" th:value="${proposalMarking.methodologyMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="methodology" name="methodology"
+                                  class="form-control" th:field="*{methodology}"
+                                  th:value="${proposalMarking.methodology}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Project plan</h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message" th:each="error : ${#fields.errors('projectPlanMark')}"
+                                   th:text="${error}">Validation error</p>
+                                <h5>Mark (max 25) </h5>
+                                <input id="projectPlanMark" name="projectPlanMark" type="number" max="25" min="0"
+                                       th:field="*{projectPlanMark}" th:value="${proposalMarking.projectPlanMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="projectPlan" name="projectPlan"
+                                  class="form-control" th:field="*{projectPlan}"
+                                  th:value="${proposalMarking.projectPlan}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Summary & Conclusion</h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message" th:each="error : ${#fields.errors('summaryConclusionMark')}"
+                                   th:text="${error}">Validation error</p>
+                                <h5>Mark (max 10) </h5>
+                                <input id="summaryConclusionMark" name="summaryConclusionMark" type="number" max="20"
+                                       min="0" th:field="*{summaryConclusionMark}"
+                                       th:value="${proposalMarking.summaryConclusionMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="summaryConclusion" name="summaryConclusion"
+                                  class="form-control" th:field="*{summaryConclusion}"
+                                  th:value="${proposalMarking.summaryConclusion}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Report Presentation & Appendices </h4>
+                            <div class="marking-box-mark-header">
+                                <p class="error-message"
+                                   th:each="error : ${#fields.errors('presentationAppendicesMark')}" th:text="${error}">
+                                    Validation error</p>
+                                <h5>Mark (max 5) </h5>
+                                <input id="presentationAppendicesMark" name="presentationAppendicesMark" type="number"
+                                       th:field="*{presentationAppendicesMark}"
+                                       th:value="${proposalMarking.presentationAppendicesMark}"
+                                       max="20"
+                                       min="0">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea type="text" id="presentationAppendices" name="presentationAppendices"
+                                  class="form-control" th:field="*{presentationAppendices}"
+                                  th:value="${proposalMarking.presentationAppendices}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <input type="text" id="projectId" name="projectId" th:value="${project.id}" th:field="${project.id}"
+                           style="display: none"/>
+
+                    <button th:if="${T(com.university.dms.Utils.ProjectUtils).hasAnyProposalBeenSubmitted(project) == true}"
+                            type="submit" class="coordinator-confirm-supervisor-button">Submit marking</button>
+
+                    <a style="display: inline-block" th:href="'/projects/' + ${project.id}" class="save-button">Go to
+                        project page</a>
+                </form>
+            </div>
+
+
+            <div style="display:block;"
+                 th:if="(${user.accountType eq T(com.university.dms.model.AccountType).STUDENT || user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR})
+                        OR (${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR && T(com.university.dms.Utils.ProjectUtils).isProposalNotGraded(proposalMarking) == false})">
+                <form id="proposal-marking-disabled" th:object="${proposalMarking}"
+                      method="post"
+                      autocomplete="off">
+                    <h3 style="margin-top: 10px">Proposal marking</h3>
+                    <h4 th:if="${project.proposal != null && proposal.grade != null}" th:text="'Final grade: ' + ${proposal.grade}"></h4>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Introduction</h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="introductionMark" name="introductionMark" type="number" max="20"
+                                       min="0" th:field="*{introductionMark}"
+                                       th:value="${proposalMarking.introductionMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="introduction" name="introduction"
+                                  class="form-control" th:field="*{introduction}"
+                                  th:value="${proposalMarking.introduction}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Aims & Objectives</h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="aimsObjectivesMark" name="aimsObjectivesMark" type="number" max="20"
+                                       min="0" th:field="*{aimsObjectivesMark}"
+                                       th:value="${proposalMarking.aimsObjectivesMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="aimsObjectives" name="aimsObjectives"
+                                  class="form-control" th:field="*{aimsObjectives}"
+                                  th:value="${proposalMarking.aimsObjectives}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Methodology</h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="methodologyMark" name="methodologyMark" type="number" max="20"
+                                       min="0" th:field="*{methodologyMark}"
+                                       th:value="${proposalMarking.methodologyMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="methodology" name="methodology"
+                                  class="form-control" th:field="*{methodology}"
+                                  th:value="${proposalMarking.methodology}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Project plan</h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="projectPlanMark" name="projectPlanMark" type="number" max="25"
+                                       min="0" th:field="*{projectPlanMark}"
+                                       th:value="${proposalMarking.projectPlanMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="projectPlan" name="projectPlan"
+                                  class="form-control" th:field="*{projectPlan}"
+                                  th:value="${proposalMarking.projectPlan}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Summary & Conclusion</h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="summaryConclusionMark" name="summaryConclusionMark" type="number"
+                                       max="20" min="0" th:field="*{summaryConclusionMark}"
+                                       th:value="${proposalMarking.summaryConclusionMark}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="summaryConclusion" name="summaryConclusion"
+                                  class="form-control" th:field="*{summaryConclusion}"
+                                  th:value="${proposalMarking.summaryConclusion}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="marking-box">
+                        <div class="marking-box-header">
+                            <h4 style="margin-top: 10px">Report Presentation & Appendices </h4>
+                            <div class="marking-box-mark-header">
+                                <h5>Mark </h5>
+                                <input readonly id="presentationAppendicesMark" name="presentationAppendicesMark"
+                                       type="number" th:field="*{presentationAppendicesMark}"
+                                       th:value="${proposalMarking.presentationAppendicesMark}"
+                                       max="20"
+                                       min="0">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                        <textarea readonly type="text" id="presentationAppendices" name="presentationAppendices"
+                                  class="form-control" th:field="*{presentationAppendices}"
+                                  th:value="${proposalMarking.presentationAppendices}"
+                                  style="height: 140px !important;"></textarea>
+                        </div>
+                    </div>
+
+                    <a style="display: inline-block" th:href="'/projects/' + ${project.id}" class="save-button">Go to
+                        project page</a>
+                </form>
+
+            </div>
         </div>
 
+    </div>
 </section>
 
 
 </body>
+
+
 </html>
 
 

@@ -1,8 +1,6 @@
 package com.university.dms.controller.supervisor;
 
-import com.university.dms.model.project.Project;
-import com.university.dms.model.project.Proposal;
-import com.university.dms.model.project.Suggestion;
+import com.university.dms.model.project.*;
 import com.university.dms.model.user.User;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
@@ -11,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,18 +27,37 @@ public class SupervisorController {
     private UserService userService;
 
 
-    @PostMapping("/post-proposal-feedback")
-    public String postFeedbackOnSuggestion(@Valid Proposal proposal, Model model) {
+    @PostMapping("/post-proposal-marking")
+    public String postFeedbackOnSuggestion(@Valid ProposalMarking proposalMarking, BindingResult bindingResult, Model model) {
 
-        Project project = projectService.findProjectById(proposal.getId());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        //Project project1 = projectService.findProjectById(Integer.parseInt(id));
 
-        Proposal proposal1 = project.getProposal();
+        Project project = projectService.findProjectById(proposalMarking.getId());
 
-        proposal1.setFeedback(proposal.getFeedback());
+        Proposal proposal = project.getProposal();
 
-        projectService.saveProposal(proposal1);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("project", project);
+            model.addAttribute("proposal", project.getProposal());
+            model.addAttribute("proposalMarking", proposalMarking);
+            return "project/proposalpage";
+        } else {
+            proposal.setProposalMarking(proposalMarking);
+            int finalGrade = proposalMarking.getIntroductionMark() + proposalMarking.getAimsObjectivesMark() +
+                                 proposalMarking.getMethodologyMark() + proposalMarking.getProjectPlanMark() +
+                                 proposalMarking.getSummaryConclusionMark() + proposalMarking.getPresentationAppendicesMark();
 
-        return "redirect:/projects/" + project.getId() + "/proposal-page";
+            project.setProjectStatus(finalGrade > 39 ? ProjectStatus.PROPOSAL_APPROVED : ProjectStatus.PROPOSAL_REJECTED);
+
+            proposal.setGrade(Integer.toString(finalGrade));
+            projectService.saveProposal(proposal);
+            return "redirect:/projects/" + project.getId() +"/proposal-page";
+        }
+
+        //return "redirect:/projects/" + project.getId() + "/proposal-page";
     }
 
     @GetMapping("/supervisor-my-projects")

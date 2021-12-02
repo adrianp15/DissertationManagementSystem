@@ -5,10 +5,8 @@ import com.cloudmersive.client.invoker.ApiClient;
 import com.cloudmersive.client.invoker.ApiException;
 import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
-import com.university.dms.model.project.Project;
-import com.university.dms.model.project.ProjectStatus;
-import com.university.dms.model.project.Proposal;
-import com.university.dms.model.project.Suggestion;
+import com.university.dms.model.AccountType;
+import com.university.dms.model.project.*;
 import com.university.dms.model.user.User;
 import com.university.dms.model.utils.ProposalWrapper;
 import com.university.dms.service.project.ProjectService;
@@ -168,13 +166,16 @@ public class StudentProjectController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
         Project project = projectService.findProjectById(Integer.parseInt(id));
-        ProposalWrapper proposalWrapper = new ProposalWrapper();
-        proposalWrapper.setProjectId(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        ProposalMarking proposalMarking = project.getProposal() == null ? new ProposalMarking() : project.getProposal().getProposalMarking() == null ? new ProposalMarking() : project.getProposal().getProposalMarking();
 
         model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
         model.addAttribute("project", project);
         model.addAttribute("proposal", project.getProposal());
-        model.addAttribute("proposalWrapper", proposalWrapper);
+        model.addAttribute("proposalMarking", proposalMarking);
 
         return "project/proposalpage";
     }
@@ -218,7 +219,6 @@ public class StudentProjectController {
 
             Proposal proposal = new Proposal();
             proposal.setDocument(result);
-            proposal.setFeedback("");
             projectService.saveProposal(proposal);
 
             project.setProposal(proposal);

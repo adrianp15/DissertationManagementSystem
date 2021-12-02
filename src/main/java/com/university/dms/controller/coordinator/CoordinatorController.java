@@ -41,7 +41,6 @@ public class CoordinatorController {
         List<User> users = userService.findAll();
         users = users.stream().limit(10).collect(Collectors.toList());
 
-
         model.addAttribute("user", user);
         model.addAttribute("users", users);
         return "coordinator/users";
@@ -61,8 +60,6 @@ public class CoordinatorController {
         model.addAttribute("users", users);
         return "coordinator/users";
     }
-
-
 
     @GetMapping("/users/{userId}")
     public String viewUserProfile(Model model, @PathVariable("userId") String userId) {
@@ -134,7 +131,6 @@ public class CoordinatorController {
                                                                 a.getProjectStatus().equals(ProjectStatus.PROPOSAL_SUBMITTED) ||
                                                                 a.getProjectStatus().equals(ProjectStatus.PROPOSAL_REJECTED) ||
                                                                 a.getProjectStatus().equals(ProjectStatus.PROPOSAL_APPROVED))
-
                                                    .collect(Collectors.toList());
         } else {
             filteredProjects = allProjects;
@@ -167,7 +163,6 @@ public class CoordinatorController {
 
         projectService.setSupervisor(project);
         return "redirect:/coordinatorviewprojects/";
-
     }
 
     @PostMapping("/post-suggestion-feedback")
@@ -199,7 +194,6 @@ public class CoordinatorController {
         filter.put(0, "Pending approval");
         filter.put(1, "Have supervisors assigned");
 
-
         model.addAttribute("user", currentUser);
         model.addAttribute("projectFilters", filter);
         model.addAttribute("allUsers", allUsers);
@@ -207,7 +201,4 @@ public class CoordinatorController {
         model.addAttribute("projectService", projectService);
         return "coordinator/coordinatorviewallprojects";
     }
-
-
-
 }
