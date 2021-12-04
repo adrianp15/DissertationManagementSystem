@@ -1,7 +1,8 @@
 package com.university.dms.model.project;
 
 
-import com.university.dms.model.AccountType;
+import com.university.dms.model.project.enums.DissertationType;
+import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,10 @@ public class Project {
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "proposal")
     private Proposal proposal;
+
+    @Column(name="project_type")
+    @Enumerated(EnumType.STRING)
+    private DissertationType projectType;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "dissertation")

@@ -7,6 +7,7 @@ import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
 import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
+import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
 import com.university.dms.model.utils.ProposalWrapper;
 import com.university.dms.service.project.ProjectService;

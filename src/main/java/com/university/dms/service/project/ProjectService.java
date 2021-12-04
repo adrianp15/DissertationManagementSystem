@@ -1,7 +1,7 @@
 package com.university.dms.service.project;
 
 import com.university.dms.model.project.Project;
-import com.university.dms.model.project.ProjectStatus;
+import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.project.Proposal;
 import com.university.dms.model.user.User;
 import com.university.dms.repository.project.ProjectRepository;

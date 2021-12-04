@@ -1,4 +1,4 @@
-package com.university.dms.model.project;
+package com.university.dms.model.project.enums;
 
 public enum ProjectStatus {
     SUGGESTION_SUBMITTED("Suggestion submitted"),

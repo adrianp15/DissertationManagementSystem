@@ -112,13 +112,10 @@
                             ${T(com.university.dms.Utils.UserUtils).hasUSerProjects(user, allProjects) == true}">
                     <div class="project-box-top">
                         <h4 th:text="${user.firstName} + ' ' + ${user.lastName}"></h4>
-                        <!--                    <a href="#" class="projects-small-button">Select</a>-->
                     </div>
                     <hr style="border: 1px solid black; margin-top: 0">
 
                     <div class="project-box-bottom">
-                        <!--                <div class="project-box-bottom" th:each="project: ${allProjects}">-->
-                        <!--                    <p th:if="${project.student.id == user.id}" th:text="${projectStat.index + 1} + '. ' + ${project.suggestion.title}"></p>-->
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -142,16 +139,12 @@
                                 <td><a th:href="'/suggestions/' + ${project.id}">View suggestion form</a></td>
                             </tr>
                             </tbody>
-
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
-
 </section>
 
 

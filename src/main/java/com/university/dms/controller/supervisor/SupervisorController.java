@@ -1,6 +1,7 @@
 package com.university.dms.controller.supervisor;
 
 import com.university.dms.model.project.*;
+import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @Controller

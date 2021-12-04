@@ -1,11 +1,19 @@
 package com.university.dms.model.project;
 
+import com.university.dms.model.project.dissertationchapters.*;
+import com.university.dms.model.project.enums.ChapterTaskFeedback;
+import com.university.dms.model.project.enums.DissertationType;
+import com.university.dms.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,25 +28,28 @@ public class Dissertation {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "title")
-    private String title;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "introduction")
+    private Introduction introduction;
 
-    @Column(name = "introduction", columnDefinition = "TEXT")
-    private String introduction;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "literature_review")
+    private LiteratureReview literatureReview;
 
-    @Column(name = "literature_review", columnDefinition = "TEXT")
-    private String literatureReview;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "methodology")
+    private Methodology methodology;
 
-    @Column(name = "methodology", columnDefinition = "TEXT")
-    private String methodology;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "development_testing")
+    private DevelopmentTesting developmentTesting;
 
-    @Column(name = "development", columnDefinition = "TEXT")
-    private String development;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "conclusion")
+    private Conclusion conclusion;
 
-    @Column(name = "conclusion", columnDefinition = "TEXT")
-    private String conclusion;
-
-    @Column(name = "ethical_form", columnDefinition = "TEXT")
-    private String ethical_form;
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "presentation_references")
+    private PresentationReferences presentationReferences;
 
 }

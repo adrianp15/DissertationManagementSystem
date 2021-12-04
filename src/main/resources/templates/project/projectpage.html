@@ -75,6 +75,16 @@
     </div>
 </section>
 
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
 
 <section class="page-content">
     <div class="top-buttons">
@@ -122,18 +132,17 @@
                 <p th:text="${project.startDate}"></p>
                 <h4>End date</h4>
                 <p th:text="${project.endDate}"></p>
-
             </div>
 
             <div class="box-in-project-details">
-                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}">
+                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT} OR ${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}">
                     <h4>Supervisor</h4>
                     <p th:if="${project.supervisor != null}"
                        th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"></p>
                     <p th:if="${project.supervisor == null}">Not assigned</p>
                 </div>
 
-                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}">
+                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR} OR ${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}">
                     <h4>Student</h4>
                     <p th:if="${project.student != null}"
                        th:text="${project.student.firstName} + ' ' + ${project.student.lastName}"></p>
@@ -145,47 +154,48 @@
         </div>
 
         <!--        PROJECT PHASES - SUGGESTION SUBMITTED-->
-        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.ProjectStatus).SUGGESTION_SUBMITTED}"
+        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_SUBMITTED}"
              class="project-phases-container" id="project-phases">
             <h2>A suggestion for this project has been submitted.</h2>
             <h2>You have to wait for approval.</h2>
         </div>
 
         <!--        PROJECT PHASES - PROJECT REJECTED-->
-        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.ProjectStatus).SUGGESTION_REJECTED}"
+        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_REJECTED}"
              class="project-phases-container" id="project-phases">
             <h2>The suggestion for this project has been rejected.</h2>
             <h2>You have to continue working on the project that has been approved.</h2>
         </div>
 
         <!--        PROJECT PHASES-->
-        <div th:if="${project.projectStatus ne T(com.university.dms.model.project.ProjectStatus).SUGGESTION_SUBMITTED} AND
-                      ${project.projectStatus ne T(com.university.dms.model.project.ProjectStatus).SUGGESTION_REJECTED}"
+        <div th:if="${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_SUBMITTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_REJECTED}"
              class="project-phases-container" id="project-phases">
             <div class="project-phase-wrap">
-                <h3 class="project-phase-title">Phase 1</h3>
+                <h3 class="project-phase-title">Phase 1 - Proposal </h3>
                 <table class="table">
                     <tr>
                         <td>
-                            Supervisor allocation <i
-                                th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).SUGGESTION_APPROVED)}"
-                                class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            Supervisor allocation
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_APPROVED)}"
+                               class="fas fa-check-circle fa-lg" style="color: green"></i>
                         </td>
                         <td class="table-align-right"></td>
                     </tr>
                     <tr>
-                        <td>Proposal submission <i
-                                th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_SUBMITTED)}"
-                                class="fas fa-check-circle fa-lg" style="color: green"></i>
+                        <td>
+                            Proposal submission
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_SUBMITTED)}"
+                               class="fas fa-check-circle fa-lg" style="color: green"></i>
                         </td>
                         <td class="table-align-right"><a th:href="'/projects/' + ${project.id} + '/proposal-page'">Select</a>
                         </td>
                     </tr>
                     <tr>
                         <td>Proposal approval
-                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_APPROVED)}"
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
                                class="fas fa-check-circle fa-lg" style="color: green"></i>
-                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_REJECTED) && !currentProjectStatuses.contains(T(com.university.dms.model.project.ProjectStatus).PROPOSAL_APPROVED)}"
+                            <i th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_REJECTED) && !currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
                                class="fas fa-times-circle fa-lg" style="color: red"></i>
                         </td>
                         <td class="table-align-right"></td>
@@ -194,36 +204,30 @@
             </div>
 
             <div class="project-phase-wrap">
-                <h3 class="project-phase-title">Phase 2</h3>
+                <h3 class="project-phase-title">Phase 2 - Dissertation</h3>
                 <table class="table">
                     <tr>
-                        <td>Project planning</td>
+                        <td>Chapter 1 - Introduction</td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Task example 3</td>
+                        <td>Chapter 2 - Problem statement / Client requirements / Literature review </td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Task example 4</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="project-phase-wrap">
-                <h3 class="project-phase-title">Phase 3</h3>
-                <table class="table">
-                    <tr>
-                        <td>Task example 4</td>
+                        <td>Chapter 3 - Methodology & Project plan</td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Task example 5</td>
+                        <td>Chapter 4 - Data collections, Analysis / Design, development etc</td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Task example 6</td>
+                        <td>Chapter 5 - Conclusion and recommendations</td>
+                        <td class="table-align-right"><a href="#">Select</a></td>
+                    </tr>
+                    <tr>
+                        <td>Presentations, references and appendices </td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                 </table>
