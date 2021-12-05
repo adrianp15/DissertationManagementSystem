@@ -282,12 +282,40 @@
                                th:href="'/projects/' + ${project.id} + '/chapter4'">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Chapter 5 - Conclusion and recommendations</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Chapter 5 - Conclusion and recommendations
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
+                                <i th:if="${project.dissertation.conclusion.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                                   class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                                <i th:if="${project.dissertation.conclusion.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                                   class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                                <i th:if="${project.dissertation.conclusion.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                                   class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                                <i th:if="${project.dissertation.conclusion.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                                   class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            </span>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                            th:href="'/projects/' + ${project.id} + '/chapter5'">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Presentations, references and appendices</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Presentations, references and appendices
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
+                                <i th:if="${project.dissertation.presentationReferences.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                                   class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                                <i th:if="${project.dissertation.presentationReferences.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                                   class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                                <i th:if="${project.dissertation.presentationReferences.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                                   class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                                <i th:if="${project.dissertation.presentationReferences.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                                   class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            </span>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                               th:href="'/projects/' + ${project.id} + '/chapter6'">Select</a></td>
                     </tr>
                 </table>
             </div>

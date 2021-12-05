@@ -2,10 +2,7 @@ package com.university.dms.controller.supervisor;
 
 import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
-import com.university.dms.model.project.dissertationchapters.DevelopmentTesting;
-import com.university.dms.model.project.dissertationchapters.Introduction;
-import com.university.dms.model.project.dissertationchapters.LiteratureReview;
-import com.university.dms.model.project.dissertationchapters.Methodology;
+import com.university.dms.model.project.dissertationchapters.*;
 import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import com.university.dms.model.project.enums.ProjectStatus;
@@ -261,6 +258,94 @@ public class SupervisorController {
             projectService.saveProject(project);
 
             return "redirect:/projects/" + project.getId() + "/chapter4";
+        }
+    }
+
+    @PostMapping("/post-chapter5-feedback")
+    public String postFeedbackOnChapter5(@Valid Conclusion conclusion, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(conclusion.getProjectId()));
+
+        if (conclusion.getSummarySubtask() == null || conclusion.getConclusionsSubtask() == null ||
+                conclusion.getRecommendationsSubtask() == null || conclusion.getFutureWorkSubtask() == null) {
+
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("conclusion", conclusion);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/chapter5";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            conclusion.setId(project.getDissertation().getConclusion().getId());
+            conclusion.setSubmittedDocument(project.getDissertation().getConclusion().getSubmittedDocument());
+            dissertation.setConclusion(conclusion);
+
+            if (conclusion.getSummarySubtask() == ChapterTaskFeedback.GOOD && conclusion.getConclusionsSubtask() == ChapterTaskFeedback.GOOD &&
+                    conclusion.getRecommendationsSubtask() == ChapterTaskFeedback.GOOD && conclusion.getFutureWorkSubtask() == ChapterTaskFeedback.GOOD) {
+                project.getDissertation().getConclusion().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getConclusion().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter5";
+        }
+    }
+
+    @PostMapping("/post-chapter6-feedback")
+    public String postFeedbackOnChapter6(@Valid PresentationReferences presentationReferences, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(presentationReferences.getProjectId()));
+
+        if (presentationReferences.getReportSubtask() == null || presentationReferences.getFrontSectionSubtask() == null ||
+                presentationReferences.getDiscussionSubtask() == null || presentationReferences.getLanguageSubtask() == null ||
+                presentationReferences.getReferencingSubtask() == null || presentationReferences.getAppendixSubtask() == null ||
+                presentationReferences.getOtherDocsSubtask() == null) {
+
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("presentationReferences", presentationReferences);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/chapter6";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            presentationReferences.setId(project.getDissertation().getPresentationReferences().getId());
+            presentationReferences.setSubmittedDocument(project.getDissertation().getPresentationReferences().getSubmittedDocument());
+            dissertation.setPresentationReferences(presentationReferences);
+
+            if (presentationReferences.getReportSubtask() == ChapterTaskFeedback.GOOD && presentationReferences.getReportSubtask() == ChapterTaskFeedback.GOOD &&
+                    presentationReferences.getDiscussionSubtask() == ChapterTaskFeedback.GOOD && presentationReferences.getLanguageSubtask() == ChapterTaskFeedback.GOOD &&
+                    presentationReferences.getReferencingSubtask() == ChapterTaskFeedback.GOOD && presentationReferences.getAppendixSubtask() == ChapterTaskFeedback.GOOD &&
+                    presentationReferences.getOtherDocsSubtask() == ChapterTaskFeedback.GOOD) {
+                project.getDissertation().getPresentationReferences().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getPresentationReferences().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter6";
         }
     }
 
