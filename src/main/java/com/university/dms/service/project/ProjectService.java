@@ -1,9 +1,11 @@
 package com.university.dms.service.project;
 
+import com.university.dms.model.project.Dissertation;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.project.Proposal;
 import com.university.dms.model.user.User;
+import com.university.dms.repository.project.DissertationRepository;
 import com.university.dms.repository.project.ProjectRepository;
 import com.university.dms.repository.project.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,13 @@ public class ProjectService {
 
     private final ProposalRepository proposalRepository;
 
+    private final DissertationRepository dissertationRepository;
+
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository, DissertationRepository dissertationRepository) {
         this.projectRepository = projectRepository;
         this.proposalRepository = proposalRepository;
+        this.dissertationRepository = dissertationRepository;
     }
 
     public void saveProject(Project project) {
@@ -135,6 +140,10 @@ public class ProjectService {
 
         return supervisorProjects;
 
+    }
+
+    public void saveDissertation(Dissertation dissertation){
+        dissertationRepository.save(dissertation);
     }
 
 }

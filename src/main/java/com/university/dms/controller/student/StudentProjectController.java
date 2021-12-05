@@ -5,17 +5,15 @@ import com.cloudmersive.client.invoker.ApiClient;
 import com.cloudmersive.client.invoker.ApiException;
 import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
-import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
+import com.university.dms.model.project.dissertationchapters.*;
+import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
-import com.university.dms.model.utils.ProposalWrapper;
+import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,15 +22,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -100,6 +94,7 @@ public class StudentProjectController {
             project.setStudent(user);
             project.setProjectStatus(ProjectStatus.SUGGESTION_SUBMITTED);
             project.setPreferredOption(false);
+            project.setProjectType(suggestion.getProjectType());
 
             projectService.saveProject(project);
         }
@@ -162,30 +157,11 @@ public class StudentProjectController {
         return "redirect:/projects/" + project1.getId();
     }
 
-    @GetMapping(value = "/projects/{id}/proposal-page")
-    public String viewProposalPage(Model model, @PathVariable("id") String id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUserName(auth.getName());
-        Project project = projectService.findProjectById(Integer.parseInt(id));
-
-        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
-
-        ProposalMarking proposalMarking = project.getProposal() == null ? new ProposalMarking() : project.getProposal().getProposalMarking() == null ? new ProposalMarking() : project.getProposal().getProposalMarking();
-
-        model.addAttribute("user", user);
-        model.addAttribute("isUserStudent", isUserStudent);
-        model.addAttribute("project", project);
-        model.addAttribute("proposal", project.getProposal());
-        model.addAttribute("proposalMarking", proposalMarking);
-
-        return "project/proposalpage";
-    }
-
-    @PostMapping("/upload/proposal")
-    public String uploadProposal(@Valid ProposalWrapper proposalWrapper)
+    @PostMapping("/upload/{type}")
+    public String uploadChapter1(@PathVariable("type") String type, @Valid UploadedFileWrapper uploadedFileWrapper)
             throws IOException, URISyntaxException {
 
-        Project project = projectService.findProjectById(proposalWrapper.getProjectId());
+        Project project = projectService.findProjectById(uploadedFileWrapper.getProjectId());
 
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setConnectTimeout(30000);
@@ -193,7 +169,7 @@ public class StudentProjectController {
         ApiKeyAuth Apikey = (ApiKeyAuth) defaultClient.getAuthentication("Apikey");
         Apikey.setApiKey("815982a1-05a5-426b-9638-ba085d169705");
 
-        MultipartFile file = proposalWrapper.getDocument();
+        MultipartFile file = uploadedFileWrapper.getDocument();
 
         if (!file.isEmpty()) {
             File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getName());
@@ -218,35 +194,47 @@ public class StudentProjectController {
                 }
             }
 
-            Proposal proposal = new Proposal();
-            proposal.setDocument(result);
-            projectService.saveProposal(proposal);
+            switch (type){
+                case "proposal":
+                    Proposal proposal = new Proposal();
+                    proposal.setDocument(result);
+//            projectService.saveProposal(proposal);
 
-            project.setProposal(proposal);
-            project.setProjectStatus(ProjectStatus.PROPOSAL_SUBMITTED);
+                    project.setProposal(proposal);
+                    project.setProjectStatus(ProjectStatus.PROPOSAL_SUBMITTED);
+
+                    Dissertation dissertation = new Dissertation();
+
+                    dissertation.setIntroduction(new Introduction());
+                    dissertation.getIntroduction().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    dissertation.setLiteratureReview(new LiteratureReview());
+                    dissertation.getLiteratureReview().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    dissertation.setMethodology(new Methodology());
+                    dissertation.getMethodology().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    dissertation.setDevelopmentTesting(new DevelopmentTesting());
+                    dissertation.getDevelopmentTesting().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    dissertation.setConclusion(new Conclusion());
+                    dissertation.getConclusion().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    dissertation.setPresentationReferences(new PresentationReferences());
+                    dissertation.getPresentationReferences().setChapterStatus(ChapterStatus.NOT_STARTED);
+
+                    project.setDissertation(dissertation);
+                    break;
+                case "chapter1":
+                    project.getDissertation().getIntroduction().setSubmittedDocument(result);
+                    break;
+            }
+
             projectService.saveProject(project);
         }
 
-        return "redirect:/projects/" + project.getId() + "/proposal-page";
+        return "redirect:/projects/" + project.getId();
     }
 
-    @GetMapping("/get/proposal/{id}")
-    public ResponseEntity<byte[]> getProposal(@PathVariable("id") String id, HttpServletResponse resp) throws IOException, SQLException {
-
-        Project project = projectService.findProjectById(Integer.parseInt(id));
-
-        byte[] byteArray = project.getProposal().getDocument();
-
-        Blob blob = new javax.sql.rowset.serial.SerialBlob(byteArray);
-
-        File outputFile = new File(System.getProperty("java.io.tmpdir") + "/" + project.getId() + ".pdf");
-        FileOutputStream fout = new FileOutputStream(outputFile);
-        IOUtils.copy(blob.getBinaryStream(), fout);
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.valueOf("application/pdf"))
-                .body(byteArray);
-    }
 
 }

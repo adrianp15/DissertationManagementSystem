@@ -1,5 +1,6 @@
 package com.university.dms.model.project.dissertationchapters;
 
+import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +23,12 @@ public class Conclusion {
     private Integer id;
 
     @Lob
-    @Column(name = "submitted_document", nullable = false, columnDefinition = "LONGBLOB")
+    @Column(name = "submitted_document", columnDefinition = "LONGBLOB")
     private byte[] submittedDocument;
+
+    @Column(name="chapter_status")
+    @Enumerated(EnumType.STRING)
+    private ChapterStatus chapterStatus;
 
     @Column(name="summary_subtask")
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package com.university.dms.model.project;
 
+import com.university.dms.model.project.enums.DissertationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +38,10 @@ public class Suggestion {
 
     @Column(name = "feedback", columnDefinition = "TEXT")
     private String feedback;
+
+    @Column(name="project_type")
+    @Enumerated(EnumType.STRING)
+    private DissertationType projectType;
 
 
 

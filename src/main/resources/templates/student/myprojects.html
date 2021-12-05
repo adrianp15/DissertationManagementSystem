@@ -86,7 +86,7 @@
                        style="margin-top: 10px;">Preferred option</a>
 
                     <a th:if="${project.preferredOption == false} AND
-                              ${project.projectStatus eq T(com.university.dms.model.project.ProjectStatus).SUGGESTION_SUBMITTED}"
+                              ${project.projectStatus eq T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_SUBMITTED}"
                        th:href="'/set-as-preffered-option/' + ${project.id}" class="set-preferred-project-button"
                        style="margin-top: 10px;">Set as preferred option</a>
 

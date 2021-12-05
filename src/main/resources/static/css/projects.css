@@ -150,6 +150,11 @@
     text-align: right;
 }
 
+.bottom-icons {
+    display: inline-block;
+    margin-left: 15px;
+}
+
 /* PROPOSAL */
 
 .marking-box{
@@ -169,4 +174,23 @@
 .error-message {
     color: red;
     margin-bottom: 0;
+}
+
+/* CHAPTERS */
+.chapter-feedback-table {
+    width: 80%;
+}
+
+.chapter-feedback-table tr td {
+    padding-bottom: 10px;
+}
+
+.chapter-feedback-table tr th:nth-last-child(-n+3){
+    width: 15%;
+    text-align:center;
+}
+
+.chapter-feedback-table tr td:nth-last-child(-n+3){
+    width: 15%;
+    text-align:center;
 }

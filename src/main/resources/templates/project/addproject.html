@@ -68,32 +68,43 @@
                 <h4>Project title</h4>
                 <div class="input-group">
                     <textarea type="text" id="title" name="title"
-                           class="form-control" th:field="*{title}"></textarea>
+                              class="form-control" th:field="*{title}"></textarea>
                 </div>
 
                 <h4>Description (200 words max)</h4>
-                <div class="input-group" >
+                <div class="input-group">
                     <textarea type="text" id="description" name="description"
-                           class="form-control" th:field="*{description}" style="height: 150px !important;"></textarea>
+                              class="form-control" th:field="*{description}"
+                              style="height: 150px !important;"></textarea>
                 </div>
 
                 <h4>Methodology (200 words max)</h4>
                 <div class="input-group">
                     <textarea type="text" id="methodology" name="methodology"
-                           class="form-control" th:field="*{methodology}" style="height: 150px !important;"></textarea>
+                              class="form-control" th:field="*{methodology}"
+                              style="height: 150px !important;"></textarea>
                 </div>
 
                 <h4>Deliverables (200 words max)</h4>
                 <div class="input-group">
                     <textarea type="text" id="deliverables" name="deliverables"
-                           class="form-control" th:field="*{deliverables}" style="height: 150px !important;"></textarea>
+                              class="form-control" th:field="*{deliverables}"
+                              style="height: 150px !important;"></textarea>
                 </div>
 
                 <h4>LSEP (200 words max)</h4>
                 <div class="input-group">
                     <textarea type="text" id="lsep" name="lsep"
-                           class="form-control" th:field="*{lsep}" style="height: 150px !important;"></textarea>
+                              class="form-control" th:field="*{lsep}" style="height: 150px !important;"></textarea>
                 </div>
+
+                <p class="details-header">Project type</p>
+                <select class="form-control" id="projectType" name="projectType">
+                    <option th:each="projectType : ${T(com.university.dms.model.project.enums.DissertationType).values()}"
+                            th:value="${projectType}"
+                            th:text="${projectType}"
+                    />
+                </select>
 
                 <button type="submit" class="general-button">Add new project</button>
             </form>

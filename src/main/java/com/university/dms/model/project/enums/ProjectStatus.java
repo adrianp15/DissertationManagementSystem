@@ -6,7 +6,8 @@ public enum ProjectStatus {
     SUGGESTION_REJECTED("Suggestion rejected"),
     PROPOSAL_SUBMITTED("Proposal submitted"),
     PROPOSAL_REJECTED("Proposal rejected"),
-    PROPOSAL_APPROVED("Proposal approved");
+    PROPOSAL_APPROVED("Proposal approved"),
+    CHAPTER1_DONE("Chapter 1 done");
 
     private String value;
 

@@ -1,8 +1,13 @@
 package com.university.dms.controller.supervisor;
 
+import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
+import com.university.dms.model.project.dissertationchapters.Introduction;
+import com.university.dms.model.project.enums.ChapterStatus;
+import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
+import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +33,13 @@ public class SupervisorController {
 
 
     @PostMapping("/post-proposal-marking")
-    public String postFeedbackOnSuggestion(@Valid ProposalMarking proposalMarking, BindingResult bindingResult, Model model) {
+    public String postFeedbackOnProposal(@Valid ProposalMarking proposalMarking, BindingResult bindingResult, Model model) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
         //Project project1 = projectService.findProjectById(Integer.parseInt(id));
 
-        Project project = projectService.findProjectById(proposalMarking.getId());
+        Project project = projectService.findProjectById(Integer.parseInt(proposalMarking.getProjectId()));
 
         Proposal proposal = project.getProposal();
 
@@ -72,6 +77,49 @@ public class SupervisorController {
         model.addAttribute("supervisorProjects", supervisorProjects);
 
         return "supervisor/supervisorviewprojects";
+    }
+
+    @PostMapping("/post-introduction-feedback")
+    public String postFeedbackOnChapter1(@Valid Introduction introduction, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        //Project project1 = projectService.findProjectById(Integer.parseInt(id));
+
+        Project project = projectService.findProjectById(Integer.parseInt(introduction.getProjectId()));
+
+        if(introduction.getAbstractSubtask() == null || introduction.getIntroductionSubtask() == null ||
+           introduction.getScopeSubtask() == null || introduction.getApproachSubtask() == null || introduction.getOverviewSubtask() == null){
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("introduction", introduction);
+            model.addAttribute("chapterWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/introduction";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            introduction.setId(project.getDissertation().getIntroduction().getId());
+            introduction.setSubmittedDocument(project.getDissertation().getIntroduction().getSubmittedDocument());
+            dissertation.setIntroduction(introduction);
+
+            if(introduction.getAbstractSubtask() == ChapterTaskFeedback.GOOD && introduction.getIntroductionSubtask() == ChapterTaskFeedback.GOOD &&
+                    introduction.getScopeSubtask() == ChapterTaskFeedback.GOOD && introduction.getApproachSubtask() == ChapterTaskFeedback.GOOD &&
+                    introduction.getOverviewSubtask() == ChapterTaskFeedback.GOOD){
+                project.getDissertation().getIntroduction().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getIntroduction().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter1";
+        }
     }
 
 }

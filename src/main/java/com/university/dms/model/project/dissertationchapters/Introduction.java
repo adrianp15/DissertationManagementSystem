@@ -1,5 +1,6 @@
 package com.university.dms.model.project.dissertationchapters;
 
+import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import com.university.dms.model.project.enums.ProjectStatus;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,15 @@ public class Introduction {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "project_id")
+    private String projectId;
+
+    @Column(name="chapter_status")
+    @Enumerated(EnumType.STRING)
+    private ChapterStatus chapterStatus;
+
     @Lob
-    @Column(name = "submitted_document", nullable = false, columnDefinition = "LONGBLOB")
+    @Column(name = "submitted_document", columnDefinition = "LONGBLOB")
     private byte[] submittedDocument;
 
     @Column(name="abstract_subtask")
@@ -50,6 +58,7 @@ public class Introduction {
 
     @Column(name = "supervisor_feedback", columnDefinition = "TEXT")
     private String supervisorFeedback;
+
 
 
 }

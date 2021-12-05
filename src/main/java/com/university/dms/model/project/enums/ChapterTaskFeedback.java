@@ -2,7 +2,7 @@ package com.university.dms.model.project.enums;
 
 public enum ChapterTaskFeedback {
     GOOD("Good"),
-    NEED_MORE_WORK("Needs more work"),
+    INCOMPLETE("Incomplete"),
     MISSING("Missing");
 
     private String value;

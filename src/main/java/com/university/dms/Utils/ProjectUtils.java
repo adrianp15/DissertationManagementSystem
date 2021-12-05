@@ -14,4 +14,5 @@ public class ProjectUtils {
     public static boolean hasAnyProposalBeenSubmitted(Project project){
         return project.getProposal() != null;
     }
+
 }

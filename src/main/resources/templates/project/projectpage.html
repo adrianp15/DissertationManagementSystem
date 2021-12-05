@@ -132,6 +132,8 @@
                 <p th:text="${project.startDate}"></p>
                 <h4>End date</h4>
                 <p th:text="${project.endDate}"></p>
+                <h4>Project type</h4>
+                <p th:text="${project.projectType.getValue()}"></p>
             </div>
 
             <div class="box-in-project-details">
@@ -207,11 +209,25 @@
                 <h3 class="project-phase-title">Phase 2 - Dissertation</h3>
                 <table class="table">
                     <tr>
-                        <td>Chapter 1 - Introduction</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Chapter 1 - Introduction
+
+                            <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                               class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                            <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                               class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                            <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                               class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                            <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                               class="fas fa-check-circle fa-lg" style="color: green"></i>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                               th:href="'/projects/' + ${project.id} + '/chapter1'">Select</a>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Chapter 2 - Problem statement / Client requirements / Literature review </td>
+                        <td>Chapter 2 - Problem statement / Client requirements / Literature review</td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
@@ -227,12 +243,19 @@
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Presentations, references and appendices </td>
+                        <td>Presentations, references and appendices</td>
                         <td class="table-align-right"><a href="#">Select</a></td>
                     </tr>
                 </table>
             </div>
 
+        </div>
+        <div>
+
+            <p class="bottom-icons"><i class="fas fa-play-circle fa-lg" style="color: orange"></i> - Not started</p>
+            <p class="bottom-icons"><i class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i> - New work submitted</p>
+            <p class="bottom-icons"><i class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i> - Needs revision from student</p>
+            <p class="bottom-icons"><i class="fas fa-check-circle fa-lg" style="color: green"></i> - Done</p>
         </div>
     </div>
 
