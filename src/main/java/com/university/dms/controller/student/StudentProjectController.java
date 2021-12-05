@@ -158,7 +158,7 @@ public class StudentProjectController {
     }
 
     @PostMapping("/upload/{type}")
-    public String uploadChapter1(@PathVariable("type") String type, @Valid UploadedFileWrapper uploadedFileWrapper)
+    public String uploadDocument(@PathVariable("type") String type, @Valid UploadedFileWrapper uploadedFileWrapper)
             throws IOException, URISyntaxException {
 
         Project project = projectService.findProjectById(uploadedFileWrapper.getProjectId());
@@ -233,6 +233,22 @@ public class StudentProjectController {
                 case "chapter2":
                     project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
                     project.getDissertation().getLiteratureReview().setSubmittedDocument(result);
+                    break;
+                case "chapter3":
+                    project.getDissertation().getMethodology().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
+                    project.getDissertation().getMethodology().setSubmittedDocument(result);
+                    break;
+                case "chapter4":
+                    project.getDissertation().getDevelopmentTesting().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
+                    project.getDissertation().getDevelopmentTesting().setSubmittedDocument(result);
+                    break;
+                case "chapter5":
+                    project.getDissertation().getConclusion().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
+                    project.getDissertation().getConclusion().setSubmittedDocument(result);
+                    break;
+                case "chapter6":
+                    project.getDissertation().getPresentationReferences().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
+                    project.getDissertation().getPresentationReferences().setSubmittedDocument(result);
                     break;
             }
 

@@ -39,7 +39,7 @@ public class Methodology {
 
     @Column(name="justification_subtask")
     @Enumerated(EnumType.STRING)
-    private ChapterTaskFeedback scopeSubtask;
+    private ChapterTaskFeedback justificationSubtask;
 
     @Column(name="methodology_subtask")
     @Enumerated(EnumType.STRING)

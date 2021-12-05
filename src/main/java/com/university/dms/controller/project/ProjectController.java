@@ -3,8 +3,7 @@ package com.university.dms.controller.project;
 import com.university.dms.model.AccountType;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProposalMarking;
-import com.university.dms.model.project.dissertationchapters.Introduction;
-import com.university.dms.model.project.dissertationchapters.LiteratureReview;
+import com.university.dms.model.project.dissertationchapters.*;
 import com.university.dms.model.user.User;
 import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
@@ -91,6 +90,18 @@ public class ProjectController {
             case "chapter2":
                 byteArray = project.getDissertation().getLiteratureReview().getSubmittedDocument();
                 break;
+            case "chapter3":
+                byteArray = project.getDissertation().getMethodology().getSubmittedDocument();
+                break;
+            case "chapter4":
+                byteArray = project.getDissertation().getDevelopmentTesting().getSubmittedDocument();
+                break;
+            case "chapter5":
+                byteArray = project.getDissertation().getConclusion().getSubmittedDocument();
+                break;
+            case "chapter6":
+                byteArray = project.getDissertation().getPresentationReferences().getSubmittedDocument();
+                break;
         }
 
 
@@ -169,6 +180,90 @@ public class ProjectController {
         model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
 
         return "project/phases/chapter2";
+    }
+
+    @GetMapping(value = "/projects/{id}/chapter3")
+    public String getDissertationChapter3(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        Methodology methodology = new Methodology();
+
+        UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+        model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
+        model.addAttribute("project", project);
+        model.addAttribute("methodology", methodology);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+
+        return "project/phases/chapter3";
+    }
+
+    @GetMapping(value = "/projects/{id}/chapter4")
+    public String getDissertationChapter4(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        DevelopmentTesting developmentTesting = new DevelopmentTesting();
+
+        UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+        model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
+        model.addAttribute("project", project);
+        model.addAttribute("developmentTesting", developmentTesting);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+
+        return "project/phases/chapter4";
+    }
+
+    @GetMapping(value = "/projects/{id}/chapter5")
+    public String getDissertationChapter5(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        Conclusion conclusion = new Conclusion();
+
+        UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+        model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
+        model.addAttribute("project", project);
+        model.addAttribute("conclusion", conclusion);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+
+        return "project/phases/chapter5";
+    }
+
+    @GetMapping(value = "/projects/{id}/chapter6")
+    public String getDissertationChapter6(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        PresentationReferences presentationReferences = new PresentationReferences();
+
+        UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+        model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
+        model.addAttribute("project", project);
+        model.addAttribute("presentationReferences", presentationReferences);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+
+        return "project/phases/chapter6";
     }
 
 

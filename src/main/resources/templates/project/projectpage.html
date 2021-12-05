@@ -211,7 +211,7 @@
                     <tr>
                         <td>
                             Chapter 1 - Introduction
-                            <span th:if="${project.dissertation != null}">
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
                                 <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
                                    class="fas fa-play-circle fa-lg" style="color: orange"></i>
                                 <i th:if="${project.dissertation.introduction.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
@@ -230,7 +230,7 @@
                     <tr>
                         <td>
                             Chapter 2 - Problem statement / Client requirements / Literature review
-                            <span th:if="${project.dissertation != null}">
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
                                 <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
                                    class="fas fa-play-circle fa-lg" style="color: orange"></i>
                                 <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
@@ -246,12 +246,40 @@
                                th:href="'/projects/' + ${project.id} + '/chapter2'">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Chapter 3 - Methodology & Project plan</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Chapter 3 - Methodology & Project plan
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
+                                <i th:if="${project.dissertation.methodology.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                                   class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                                <i th:if="${project.dissertation.methodology.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                                   class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                                <i th:if="${project.dissertation.methodology.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                                   class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                                <i th:if="${project.dissertation.methodology.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                                   class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            </span>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                                th:href="'/projects/' + ${project.id} + '/chapter3'">Select</a></td>
                     </tr>
                     <tr>
-                        <td>Chapter 4 - Data collections, Analysis / Design, development etc</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Chapter 4 - Data collection, Analysis / Design, development etc
+                            <span th:if="${project.dissertation != null} AND ${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}">
+                                <i th:if="${project.dissertation.developmentTesting.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                                   class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                                <i th:if="${project.dissertation.developmentTesting.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                                   class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                                <i th:if="${project.dissertation.developmentTesting.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                                   class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                                <i th:if="${project.dissertation.developmentTesting.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                                   class="fas fa-check-circle fa-lg" style="color: green"></i>
+                            </span>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                               th:href="'/projects/' + ${project.id} + '/chapter4'">Select</a></td>
                     </tr>
                     <tr>
                         <td>Chapter 5 - Conclusion and recommendations</td>

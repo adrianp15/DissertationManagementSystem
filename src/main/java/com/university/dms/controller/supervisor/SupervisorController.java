@@ -2,8 +2,10 @@ package com.university.dms.controller.supervisor;
 
 import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
+import com.university.dms.model.project.dissertationchapters.DevelopmentTesting;
 import com.university.dms.model.project.dissertationchapters.Introduction;
 import com.university.dms.model.project.dissertationchapters.LiteratureReview;
+import com.university.dms.model.project.dissertationchapters.Methodology;
 import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import com.university.dms.model.project.enums.ProjectStatus;
@@ -53,14 +55,14 @@ public class SupervisorController {
         } else {
             proposal.setProposalMarking(proposalMarking);
             int finalGrade = proposalMarking.getIntroductionMark() + proposalMarking.getAimsObjectivesMark() +
-                                 proposalMarking.getMethodologyMark() + proposalMarking.getProjectPlanMark() +
-                                 proposalMarking.getSummaryConclusionMark() + proposalMarking.getPresentationAppendicesMark();
+                    proposalMarking.getMethodologyMark() + proposalMarking.getProjectPlanMark() +
+                    proposalMarking.getSummaryConclusionMark() + proposalMarking.getPresentationAppendicesMark();
 
             project.setProjectStatus(finalGrade > 39 ? ProjectStatus.PROPOSAL_APPROVED : ProjectStatus.PROPOSAL_REJECTED);
 
             proposal.setGrade(Integer.toString(finalGrade));
             projectService.saveProposal(proposal);
-            return "redirect:/projects/" + project.getId() +"/proposal-page";
+            return "redirect:/projects/" + project.getId() + "/proposal-page";
         }
 
         //return "redirect:/projects/" + project.getId() + "/proposal-page";
@@ -88,8 +90,8 @@ public class SupervisorController {
 
         Project project = projectService.findProjectById(Integer.parseInt(introduction.getProjectId()));
 
-        if(introduction.getAbstractSubtask() == null || introduction.getIntroductionSubtask() == null ||
-           introduction.getScopeSubtask() == null || introduction.getApproachSubtask() == null || introduction.getOverviewSubtask() == null){
+        if (introduction.getAbstractSubtask() == null || introduction.getIntroductionSubtask() == null ||
+                introduction.getScopeSubtask() == null || introduction.getApproachSubtask() == null || introduction.getOverviewSubtask() == null) {
             boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
 
             UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
@@ -108,9 +110,9 @@ public class SupervisorController {
             introduction.setSubmittedDocument(project.getDissertation().getIntroduction().getSubmittedDocument());
             dissertation.setIntroduction(introduction);
 
-            if(introduction.getAbstractSubtask() == ChapterTaskFeedback.GOOD && introduction.getIntroductionSubtask() == ChapterTaskFeedback.GOOD &&
+            if (introduction.getAbstractSubtask() == ChapterTaskFeedback.GOOD && introduction.getIntroductionSubtask() == ChapterTaskFeedback.GOOD &&
                     introduction.getScopeSubtask() == ChapterTaskFeedback.GOOD && introduction.getApproachSubtask() == ChapterTaskFeedback.GOOD &&
-                    introduction.getOverviewSubtask() == ChapterTaskFeedback.GOOD){
+                    introduction.getOverviewSubtask() == ChapterTaskFeedback.GOOD) {
                 project.getDissertation().getIntroduction().setChapterStatus(ChapterStatus.DONE);
             } else {
                 project.getDissertation().getIntroduction().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
@@ -130,10 +132,10 @@ public class SupervisorController {
 
         Project project = projectService.findProjectById(Integer.parseInt(literatureReview.getProjectId()));
 
-        if(literatureReview.getIntroductionSubtask() == null || literatureReview.getOverviewSubtask() == null ||
+        if (literatureReview.getIntroductionSubtask() == null || literatureReview.getOverviewSubtask() == null ||
                 literatureReview.getConcernsSubtask() == null || literatureReview.getRequirementsSubtask() == null ||
                 literatureReview.getLitReviewSubtask() == null || literatureReview.getLsepSubtask() == null ||
-                literatureReview.getSummarySubtask() == null){
+                literatureReview.getSummarySubtask() == null) {
 
             boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
 
@@ -153,10 +155,10 @@ public class SupervisorController {
             literatureReview.setSubmittedDocument(project.getDissertation().getLiteratureReview().getSubmittedDocument());
             dissertation.setLiteratureReview(literatureReview);
 
-            if(literatureReview.getIntroductionSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getOverviewSubtask() == ChapterTaskFeedback.GOOD &&
+            if (literatureReview.getIntroductionSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getOverviewSubtask() == ChapterTaskFeedback.GOOD &&
                     literatureReview.getConcernsSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getRequirementsSubtask() == ChapterTaskFeedback.GOOD &&
                     literatureReview.getLitReviewSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getLsepSubtask() == ChapterTaskFeedback.GOOD &&
-                    literatureReview.getSummarySubtask() == ChapterTaskFeedback.GOOD){
+                    literatureReview.getSummarySubtask() == ChapterTaskFeedback.GOOD) {
                 project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.DONE);
             } else {
                 project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
@@ -165,6 +167,100 @@ public class SupervisorController {
             projectService.saveProject(project);
 
             return "redirect:/projects/" + project.getId() + "/chapter2";
+        }
+    }
+
+    @PostMapping("/post-chapter3-feedback")
+    public String postFeedbackOnChapter3(@Valid Methodology methodology, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(methodology.getProjectId()));
+
+        if (methodology.getIntroductionSubtask() == null || methodology.getMethodologySubtask() == null ||
+                methodology.getPlanningSubtask() == null || methodology.getSummarySubtask() == null ||
+                methodology.getJustificationSubtask() == null) {
+
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("methodology", methodology);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/chapter3";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            methodology.setId(project.getDissertation().getMethodology().getId());
+            methodology.setSubmittedDocument(project.getDissertation().getMethodology().getSubmittedDocument());
+            dissertation.setMethodology(methodology);
+
+            if (methodology.getIntroductionSubtask() == ChapterTaskFeedback.GOOD && methodology.getMethodologySubtask() == ChapterTaskFeedback.GOOD &&
+                    methodology.getPlanningSubtask() == ChapterTaskFeedback.GOOD && methodology.getSummarySubtask() == ChapterTaskFeedback.GOOD &&
+                    methodology.getJustificationSubtask() == ChapterTaskFeedback.GOOD) {
+                project.getDissertation().getMethodology().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getMethodology().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter3";
+        }
+    }
+
+    @PostMapping("/post-chapter4-feedback")
+    public String postFeedbackOnChapter4(@Valid DevelopmentTesting developmentTesting, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(developmentTesting.getProjectId()));
+
+        if (developmentTesting.getIntroductionSubtask() == null || developmentTesting.getSpecificationsSubtask() == null ||
+                developmentTesting.getAnalysisSubtask() == null || developmentTesting.getDesignSubtask() == null ||
+                developmentTesting.getDevelopmentSubtask() == null || developmentTesting.getTestingSubtask() == null ||
+                developmentTesting.getChallengesSubtask() == null || developmentTesting.getCompareSubtask() == null ||
+                developmentTesting.getProblemsSubtask() == null || developmentTesting.getReflectSubtask() == null ||
+                developmentTesting.getDiscussionSubtask() == null || developmentTesting.getSummarySubtask() == null) {
+
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("developmentTesting", developmentTesting);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/chapter4";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            developmentTesting.setId(project.getDissertation().getDevelopmentTesting().getId());
+            developmentTesting.setSubmittedDocument(project.getDissertation().getDevelopmentTesting().getSubmittedDocument());
+            dissertation.setDevelopmentTesting(developmentTesting);
+
+            if (developmentTesting.getIntroductionSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getSpecificationsSubtask() == ChapterTaskFeedback.GOOD &&
+                    developmentTesting.getAnalysisSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getDesignSubtask() == ChapterTaskFeedback.GOOD &&
+                    developmentTesting.getDevelopmentSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getTestingSubtask() == ChapterTaskFeedback.GOOD &&
+                    developmentTesting.getChallengesSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getCompareSubtask() == ChapterTaskFeedback.GOOD &&
+                    developmentTesting.getProblemsSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getReflectSubtask() == ChapterTaskFeedback.GOOD &&
+                    developmentTesting.getDiscussionSubtask() == ChapterTaskFeedback.GOOD && developmentTesting.getSummarySubtask() == ChapterTaskFeedback.GOOD) {
+                project.getDissertation().getDevelopmentTesting().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getDevelopmentTesting().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter4";
         }
     }
 
