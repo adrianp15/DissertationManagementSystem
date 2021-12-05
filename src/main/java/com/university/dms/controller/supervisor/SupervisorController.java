@@ -3,6 +3,7 @@ package com.university.dms.controller.supervisor;
 import com.university.dms.model.AccountType;
 import com.university.dms.model.project.*;
 import com.university.dms.model.project.dissertationchapters.Introduction;
+import com.university.dms.model.project.dissertationchapters.LiteratureReview;
 import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ChapterTaskFeedback;
 import com.university.dms.model.project.enums.ProjectStatus;
@@ -79,12 +80,11 @@ public class SupervisorController {
         return "supervisor/supervisorviewprojects";
     }
 
-    @PostMapping("/post-introduction-feedback")
+    @PostMapping("/post-chapter1-feedback")
     public String postFeedbackOnChapter1(@Valid Introduction introduction, BindingResult bindingResult, Model model) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
-        //Project project1 = projectService.findProjectById(Integer.parseInt(id));
 
         Project project = projectService.findProjectById(Integer.parseInt(introduction.getProjectId()));
 
@@ -98,10 +98,10 @@ public class SupervisorController {
             model.addAttribute("isUserStudent", isUserStudent);
             model.addAttribute("project", project);
             model.addAttribute("introduction", introduction);
-            model.addAttribute("chapterWrapper", uploadedFileWrapper);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
             model.addAttribute("missingFeedback", true);
 
-            return "project/phases/introduction";
+            return "project/phases/chapter1";
         } else {
             Dissertation dissertation = project.getDissertation();
             introduction.setId(project.getDissertation().getIntroduction().getId());
@@ -119,6 +119,52 @@ public class SupervisorController {
             projectService.saveProject(project);
 
             return "redirect:/projects/" + project.getId() + "/chapter1";
+        }
+    }
+
+    @PostMapping("/post-chapter2-feedback")
+    public String postFeedbackOnChapter2(@Valid LiteratureReview literatureReview, BindingResult bindingResult, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(literatureReview.getProjectId()));
+
+        if(literatureReview.getIntroductionSubtask() == null || literatureReview.getOverviewSubtask() == null ||
+                literatureReview.getConcernsSubtask() == null || literatureReview.getRequirementsSubtask() == null ||
+                literatureReview.getLitReviewSubtask() == null || literatureReview.getLsepSubtask() == null ||
+                literatureReview.getSummarySubtask() == null){
+
+            boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+            UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+            model.addAttribute("user", user);
+            model.addAttribute("isUserStudent", isUserStudent);
+            model.addAttribute("project", project);
+            model.addAttribute("literatureReview", literatureReview);
+            model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+            model.addAttribute("missingFeedback", true);
+
+            return "project/phases/chapter2";
+        } else {
+            Dissertation dissertation = project.getDissertation();
+            literatureReview.setId(project.getDissertation().getLiteratureReview().getId());
+            literatureReview.setSubmittedDocument(project.getDissertation().getLiteratureReview().getSubmittedDocument());
+            dissertation.setLiteratureReview(literatureReview);
+
+            if(literatureReview.getIntroductionSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getOverviewSubtask() == ChapterTaskFeedback.GOOD &&
+                    literatureReview.getConcernsSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getRequirementsSubtask() == ChapterTaskFeedback.GOOD &&
+                    literatureReview.getLitReviewSubtask() == ChapterTaskFeedback.GOOD && literatureReview.getLsepSubtask() == ChapterTaskFeedback.GOOD &&
+                    literatureReview.getSummarySubtask() == ChapterTaskFeedback.GOOD){
+                project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.DONE);
+            } else {
+                project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.NEEDS_REVISION_FROM_STUDENT);
+            }
+            projectService.saveDissertation(dissertation);
+            projectService.saveProject(project);
+
+            return "redirect:/projects/" + project.getId() + "/chapter2";
         }
     }
 

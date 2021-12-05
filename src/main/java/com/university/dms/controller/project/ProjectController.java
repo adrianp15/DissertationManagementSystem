@@ -4,6 +4,7 @@ import com.university.dms.model.AccountType;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProposalMarking;
 import com.university.dms.model.project.dissertationchapters.Introduction;
+import com.university.dms.model.project.dissertationchapters.LiteratureReview;
 import com.university.dms.model.user.User;
 import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
@@ -88,6 +89,7 @@ public class ProjectController {
                 byteArray = project.getDissertation().getIntroduction().getSubmittedDocument();
                 break;
             case "chapter2":
+                byteArray = project.getDissertation().getLiteratureReview().getSubmittedDocument();
                 break;
         }
 
@@ -127,7 +129,6 @@ public class ProjectController {
     }
 
 
-
     @GetMapping(value = "/projects/{id}/chapter1")
     public String getDissertationChapter1(Model model, @PathVariable("id") String id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -144,9 +145,30 @@ public class ProjectController {
         model.addAttribute("isUserStudent", isUserStudent);
         model.addAttribute("project", project);
         model.addAttribute("introduction", introduction);
-        model.addAttribute("chapterWrapper", uploadedFileWrapper);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
 
-        return "project/phases/introduction";
+        return "project/phases/chapter1";
+    }
+
+    @GetMapping(value = "/projects/{id}/chapter2")
+    public String getDissertationChapter2(Model model, @PathVariable("id") String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        boolean isUserStudent = user.getAccountType() == AccountType.STUDENT;
+
+        LiteratureReview literatureReview = new LiteratureReview();
+
+        UploadedFileWrapper uploadedFileWrapper = new UploadedFileWrapper();
+
+        model.addAttribute("user", user);
+        model.addAttribute("isUserStudent", isUserStudent);
+        model.addAttribute("project", project);
+        model.addAttribute("literatureReview", literatureReview);
+        model.addAttribute("uploadedFileWrapper", uploadedFileWrapper);
+
+        return "project/phases/chapter2";
     }
 
 

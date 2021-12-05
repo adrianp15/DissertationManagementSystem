@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{../../css/style.css}">
+    <link rel="stylesheet" th:href="@{../../css/home.css}">
+    <link rel="stylesheet" th:href="@{../../css/projects.css}">
+    <link rel="stylesheet" th:href="@{../../css/profile.css}">
+    <title>Dissertation Management System</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+</head>
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My Profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/student-my-projects}">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section class="page-content">
+    <div class="content-flex">
+        <div class="left-side" style="min-height: 90vh">
+            <h3 style="margin: 10px 0 0 10px">Chapter 2 - Problem statement / Client requirements / Literature
+                review</h3>
+            <div style="border: 1px solid black; margin: 10px; height: 90%">
+                <iframe th:if="${project.dissertation.literatureReview.submittedDocument != null}"
+                        th:src="'/get/chapter2/' + ${project.id}"
+                        style="width:100%;height:100%;" type='application/pdf'></iframe>
+                <h4 th:if="${project.dissertation.introduction.submittedDocument == null}">No work submitted</h4>
+            </div>
+        </div>
+
+        <div class="right-side">
+            <div th:if="${(user.accountType eq T(com.university.dms.model.AccountType).STUDENT)}"
+                 style="display:block; margin-top: 20px">
+                <h4>Select file to submit</h4>
+                <form th:action="@{/upload/chapter2}" th:object="${uploadedFileWrapper}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <div>
+                        <input type="file" name="document" accept=".docx,.pdf"/>
+                    </div>
+
+                    <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+
+                    <button type="submit" class="save-button">Submit file</button>
+                </form>
+            </div>
+
+            <!--            DISPLAY FOR STUDENT AND COORDINATOR-->
+            <div style="display:block;"
+                 th:if="(${user.accountType eq T(com.university.dms.model.AccountType).STUDENT || user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR})">
+
+                <h4>Supervisor feedback</h4>
+
+                <form id="supervisor-feedback" th:object="${literatureReview}"
+                      method="post"
+                      autocomplete="off">
+                    <table class="chapter-feedback-table">
+                        <tr>
+                            <th></th>
+                            <th>Good</th>
+                            <th>Incomplete</th>
+                            <th>Missing</th>
+                        </tr>
+
+                        <tr>
+                            <td>Chapter introduction</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="introductionSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.introductionSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.introductionSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Overview of Problem / Issue / Requirement / Opportunity</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="overviewSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.overviewSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.overviewSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Concerns / Difficulties from Problem / Issue / Requirement / Opportunity</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="concernsSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.concernsSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.concernsSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Requirements and Expectations on Potential / Desired Solution</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="requirementsSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.requirementsSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.requirementsSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Literature Review / Market Research / Alternative Solutions</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="litReviewSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.litReviewSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.litReviewSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>LSEP Issues</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="lsepSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.lsepSubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.lsepSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Chapter Summary</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="summarySubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.summarySubtask}"
+                                           th:disabled="${box ne project.dissertation.literatureReview.summarySubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                    </table>
+
+                    <h4>Feedback</h4>
+                    <div class="input-group">
+                    <textarea readonly type="text" id="supervisorFeedback" name="supervisorFeedback"
+                              class="form-control" th:name="supervisorFeedback"
+                              th:text="${project.dissertation.literatureReview.supervisorFeedback}"
+                              th:value="${project.dissertation.literatureReview.supervisorFeedback}"
+                              style="height: 300px !important;"></textarea>
+                    </div>
+
+                    <a style="display: inline-block" th:href="'/projects/' + ${project.id}" class="save-button">Go to
+                        project page</a>
+                </form>
+
+            </div>
+
+            <!--            DISPLAY FOR SUPERVISOR -->
+            <div style="display:block;"
+                 th:if="(${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR})">
+
+                <h4 style="margin-top: 10px">Choose an option for each subtask</h4>
+                <form id="introduction-feedback" th:action="@{/post-chapter2-feedback}" th:object="${literatureReview}"
+                      method="post"
+                      autocomplete="off">
+                    <table class="chapter-feedback-table">
+                        <tr>
+                            <th></th>
+                            <th>Good</th>
+                            <th>Incomplete</th>
+                            <th>Missing</th>
+                        </tr>
+
+                        <tr>
+                            <td>Chapter introduction</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="introductionSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.introductionSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Overview of Problem / Issue / Requirement / Opportunity</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="overviewSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.overviewSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Concerns / Difficulties from Problem / Issue / Requirement / Opportunity</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="concernsSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.concernsSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Requirements and Expectations on Potential / Desired Solution</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="requirementsSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.requirementsSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Literature Review / Market Research / Alternative Solutions</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="litReviewSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.litReviewSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>LSEP Issues</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="lsepSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.lsepSubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <td>Chapter Summary</td>
+                            <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
+                                <td>
+                                    <input type="radio" th:name="summarySubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.literatureReview.summarySubtask}">
+                                </td>
+                            </div>
+                        </tr>
+
+                    </table>
+
+                    <h4>Feedback</h4>
+                    <div class="input-group">
+                    <textarea type="text" id="supervisorFeedback" name="supervisorFeedback"
+                              class="form-control" th:name="supervisorFeedback"
+                              th:text="${project.dissertation.literatureReview.supervisorFeedback}"
+                              th:value="${project.dissertation.literatureReview.supervisorFeedback}"
+                              style="height: 300px !important;"></textarea>
+                    </div>
+
+                    <input type="text" id="projectId" th:value="${project.id}" th:name="projectId"
+                           style="display: none"/>
+
+                    <button type="submit" class="coordinator-confirm-supervisor-button">Post feedback</button>
+
+                    <a style="display: inline-block" th:href="'/projects/' + ${project.id}" class="save-button">Go to
+                        project page</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>

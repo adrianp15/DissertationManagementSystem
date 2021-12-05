@@ -227,8 +227,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Chapter 2 - Problem statement / Client requirements / Literature review</td>
-                        <td class="table-align-right"><a href="#">Select</a></td>
+                        <td>
+                            Chapter 2 - Problem statement / Client requirements / Literature review
+
+                            <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NOT_STARTED}"
+                               class="fas fa-play-circle fa-lg" style="color: orange"></i>
+                            <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEW_WORK_SUBMITTED}"
+                               class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i>
+                            <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).NEEDS_REVISION_FROM_STUDENT}"
+                               class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i>
+                            <i th:if="${project.dissertation.literatureReview.chapterStatus eq T(com.university.dms.model.project.enums.ChapterStatus).DONE}"
+                               class="fas fa-check-circle fa-lg" style="color: green"></i>
+                        </td>
+                        <td class="table-align-right">
+                            <a th:if="${currentProjectStatuses.contains(T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED)}"
+                               th:href="'/projects/' + ${project.id} + '/chapter2'">Select</a></td>
                     </tr>
                     <tr>
                         <td>Chapter 3 - Methodology & Project plan</td>
@@ -253,8 +266,10 @@
         <div>
 
             <p class="bottom-icons"><i class="fas fa-play-circle fa-lg" style="color: orange"></i> - Not started</p>
-            <p class="bottom-icons"><i class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i> - New work submitted</p>
-            <p class="bottom-icons"><i class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i> - Needs revision from student</p>
+            <p class="bottom-icons"><i class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i> - New work submitted
+            </p>
+            <p class="bottom-icons"><i class="fas fa-exclamation-circle fa-lg" style="color: #f82424"></i> - Needs
+                revision from student</p>
             <p class="bottom-icons"><i class="fas fa-check-circle fa-lg" style="color: green"></i> - Done</p>
         </div>
     </div>

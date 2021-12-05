@@ -22,6 +22,9 @@ public class Conclusion {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "project_id")
+    private String projectId;
+
     @Lob
     @Column(name = "submitted_document", columnDefinition = "LONGBLOB")
     private byte[] submittedDocument;

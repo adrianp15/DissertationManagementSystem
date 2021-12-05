@@ -110,7 +110,7 @@
 
                 <h4>Supervisor feedback</h4>
 
-                <form id="introduction-feedback" th:action="@{/post-introduction-feedback}" th:object="${introduction}"
+                <form id="introduction-feedback" th:object="${introduction}"
                       method="post"
                       autocomplete="off">
                     <table class="chapter-feedback-table">
@@ -197,7 +197,7 @@
                  th:if="(${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR})">
 
                 <h4 style="margin-top: 10px">Choose an option for each subtask</h4>
-                <form id="introduction-feedback" th:action="@{/post-introduction-feedback}" th:object="${introduction}"
+                <form id="introduction-feedback" th:action="@{/post-chapter1-feedback}" th:object="${introduction}"
                       method="post"
                       autocomplete="off">
                     <table class="chapter-feedback-table">

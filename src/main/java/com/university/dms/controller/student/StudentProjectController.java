@@ -226,7 +226,13 @@ public class StudentProjectController {
                     project.setDissertation(dissertation);
                     break;
                 case "chapter1":
+                    project.getDissertation().getIntroduction().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
                     project.getDissertation().getIntroduction().setSubmittedDocument(result);
+                    break;
+
+                case "chapter2":
+                    project.getDissertation().getLiteratureReview().setChapterStatus(ChapterStatus.NEW_WORK_SUBMITTED);
+                    project.getDissertation().getLiteratureReview().setSubmittedDocument(result);
                     break;
             }
 
