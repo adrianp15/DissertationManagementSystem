@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{../../css/style.css}">
+    <link rel="stylesheet" th:href="@{../../css/home.css}">
+    <link rel="stylesheet" th:href="@{../../css/projects.css}">
+    <link rel="stylesheet" th:href="@{../../css/profile.css}">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <title>Dissertation Management System</title>
+
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My Profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/student-my-projects}">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+
+<section class="page-content">
+    <div class="top-buttons">
+        <button id="discussionbutton" class="projects-large-button" style="margin-right: 20px">Discussions</button>
+        <a id="go-back-from-activity-plan" class="projects-large-button" th:href="'/projects/' + ${project.id}" style="margin-right: 20px">Go back</a>
+    </div>
+
+    <!--    DISCUSSIONS PAGE-->
+    <div class="content" id="discussions">
+        <div class="discussions-wrapper">
+            <h4 th:text="${discussion.title}"></h4>
+            <div th:each="message: ${discussion.messages} ">
+                <div class="discussions-wrapper" style="width: auto">
+                    <p style="background: bisque" th:text="${message.message}"></p>
+                    <p style="margin-bottom: 2px">Attachments:
+                        <span th:if="${message.attachment == null}">No file attached</span>
+                        <a th:if="${message.attachment != null}" th:href="'/getmessagedocument/' + ${message.id} + '/' + ${project.id}">Download attachment</a>
+
+                    </p>
+                    <p>Posted by: <span th:text="${message.postedBy.firstName + ' ' + message.postedBy.lastName + ' on ' + message.postDate}"></span></p>
+                </div>
+            </div>
+
+            <form th:action="@{/submit-new-message}" th:object="${newMessageWrapper}" method="post" enctype="multipart/form-data">
+                <h4>Post new message</h4>
+                <div class="input-group" style="margin-bottom: 10px">
+                    <textarea type="text" name="title"
+                              class="form-control" th:field="*{message}"></textarea>
+                </div>
+
+                <div>
+                    <input type="file" name="document" accept=".docx,.pdf"/>
+                </div>
+
+                <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+
+                <input type="text" name="discussionId" th:value="${discussion.id}" style="display: none"/>
+
+                <button type="submit" class="save-button" style="margin-bottom: 0">Post message</button>
+            </form>
+
+
+        </div>
+
+    </div>
+
+    <!--    MEETINGS PAGE -->
+    <div class="content hidden" id="meetings">
+        <h1>Meetings</h1>
+    </div>
+
+
+</section>
+
+
+</body>
+
+</html>

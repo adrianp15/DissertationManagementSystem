@@ -1,6 +1,8 @@
 package com.university.dms.model.project;
 
 
+import com.university.dms.model.discussions.Discussion;
+import com.university.dms.model.discussions.DiscussionMessage;
 import com.university.dms.model.project.enums.DissertationType;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
@@ -12,6 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -67,5 +71,8 @@ public class Project {
 
     @Column(name = "preferred_option")
     private Boolean preferredOption;
+
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "project")
+    private List<Discussion> discussions;
 
 }

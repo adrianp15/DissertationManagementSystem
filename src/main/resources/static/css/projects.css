@@ -194,3 +194,11 @@
     width: 15%;
     text-align:center;
 }
+
+/* DISCUSSIONS */
+.discussions-wrapper {
+    padding: 10px;
+    border: 1px solid black;
+    margin: 10px 0;
+    width: 90%;
+}

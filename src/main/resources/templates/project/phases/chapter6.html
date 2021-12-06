@@ -136,9 +136,9 @@
                             <td>Front Section: Abstract, Contents, Lists, Abbreviations, Acknowledgements</td>
                             <div th:each="box : ${T(com.university.dms.model.project.enums.ChapterTaskFeedback).values()}">
                                 <td>
-                                    <input type="radio" th:name="discussionSubtask" th:value="${box}"
-                                           th:checked="${box eq project.dissertation.presentationReferences.discussionSubtask}"
-                                           th:disabled="${box ne project.dissertation.presentationReferences.discussionSubtask}">
+                                    <input type="radio" th:name="frontSectionSubtask" th:value="${box}"
+                                           th:checked="${box eq project.dissertation.presentationReferences.frontSectionSubtask}"
+                                           th:disabled="${box ne project.dissertation.presentationReferences.frontSectionSubtask}">
                                 </td>
                             </div>
                         </tr>

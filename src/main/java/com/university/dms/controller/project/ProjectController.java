@@ -1,6 +1,8 @@
 package com.university.dms.controller.project;
 
 import com.university.dms.model.AccountType;
+import com.university.dms.model.discussions.Discussion;
+import com.university.dms.model.discussions.DiscussionMessage;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProposalMarking;
 import com.university.dms.model.project.dissertationchapters.*;
@@ -116,6 +118,8 @@ public class ProjectController {
                 .contentType(MediaType.valueOf("application/pdf"))
                 .body(byteArray);
     }
+
+
 
 
     @GetMapping(value = "/projects/{id}/proposal-page")
@@ -265,6 +269,7 @@ public class ProjectController {
 
         return "project/phases/chapter6";
     }
+
 
 
 

@@ -14,6 +14,7 @@
     <link rel="stylesheet" th:href="@{../css/style.css}">
     <link rel="stylesheet" th:href="@{../css/home.css}">
     <link rel="stylesheet" th:href="@{../css/projects.css}">
+    <link rel="stylesheet" th:href="@{../css/profile.css}">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
             crossorigin="anonymous"></script>
@@ -335,7 +336,126 @@
 
     <!--    DISCUSSIONS PAGE-->
     <div class="content hidden" id="discussions">
-        <h1>Discussions</h1>
+        <div class="project-details-box">
+            <div class="box-in-project-details">
+                <h4>Project title</h4>
+                <p id="projecttitle" th:text="${project.title}"></p>
+
+                <form th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" class="hidden"
+                      id="change-project-title" th:action="@{/change-project-title}" th:object="${project}"
+                      method="post" autocomplete="off"
+                      style="min-width: 20%;">
+                    <input type="text" id="title" name="title"
+                           th:value="${project.title}"
+                           class="form-control"/>
+                    <input type="text" id="id" name="id" placeholder="Id" th:field="*{id}" style="display: none"/>
+
+                    <button id="saveprojectitle" type="submit" class="btn"
+                            style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px">Save
+                    </button>
+                    <a id="cancelsaveprojectitle" class="btn"
+                       style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px; color: white">Cancel</a>
+                </form>
+
+                <button th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}"
+                        id="editprojectitle" class="btn"
+                        style="margin-bottom: 10px; margin-top: 10px; padding: 8px 12px">Edit project title
+                </button>
+                <a class="btn" style="margin-top: 10px; margin-bottom: 10px; padding: 8px 12px"
+                   th:href="'/suggestions/' + ${project.id}">View suggestion form</a>
+
+            </div>
+
+            <div class="box-in-project-details">
+                <h4>Start date</h4>
+                <p th:text="${project.startDate}"></p>
+                <h4>End date</h4>
+                <p th:text="${project.endDate}"></p>
+                <h4>Project type</h4>
+                <p th:text="${project.projectType.getValue()}"></p>
+            </div>
+
+            <div class="box-in-project-details">
+                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT} OR ${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}">
+                    <h4>Supervisor</h4>
+                    <p th:if="${project.supervisor != null}"
+                       th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"></p>
+                    <p th:if="${project.supervisor == null}">Not assigned</p>
+                </div>
+
+                <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR} OR ${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}">
+                    <h4>Student</h4>
+                    <p th:if="${project.student != null}"
+                       th:text="${project.student.firstName} + ' ' + ${project.student.lastName}"></p>
+                </div>
+
+                <h4>Project stage</h4>
+                <p th:text="${project.projectStatus.getValue()}"></p>
+            </div>
+        </div>
+
+        <div id="new-discussions-button-wrapper" class="discussions-wrapper">
+            <a id="new-discussion-button" class="btn" style="margin-top: 0" href="#" >Create new discussion</a>
+            <span>Communications between student and supervisor on this project</span>
+        </div>
+
+        <div id="all-discussions-wrapper" class="discussions-wrapper">
+            <table th:if="${project.discussions.size() > 0}" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 60%">Discussion title</th>
+                        <th style="width: 15%">Replies</th>
+                        <th style="width: 35%">Last message by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="discussion : ${project.discussions}">
+                        <td>
+                            <a th:text="${discussion.title}" th:href="'/projects/' + ${project.id} + '/' + ${discussion.id}"></a>
+                        </td>
+                        <td th:text="${discussion.messages.size()}"></td>
+                        <td>
+                            <p th:text="${T(com.university.dms.Utils.ProjectUtils).getLatestMessage(discussion).postedBy.firstName + ' ' + T(com.university.dms.Utils.ProjectUtils).getLatestMessage(discussion).postedBy.lastName}"></p>
+                            <p th:text="${T(com.university.dms.Utils.ProjectUtils).getLatestMessage(discussion).postDate}"></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${project.discussions.size() == 0}">
+                <h4>No discussions yet. Start a new discussion by pressing the button above.</h4>
+            </div>
+        </div>
+
+        <div id="add-new-discussions-wrapper" class="discussions-wrapper hidden">
+            <h4 class="project-phase-title">Create new discussion</h4>
+            <form th:action="@{/submit-new-discussion}" th:object="${discussionWrapper}" method="post" enctype="multipart/form-data">
+                <h5>Title</h5>
+                <div class="input-group">
+                    <textarea type="text" name="title"
+                              class="form-control" th:field="*{title}"></textarea>
+                </div>
+
+                <h5>Message</h5>
+                <div class="input-group">
+                    <textarea style="height: 100px; margin-bottom: 15px" type="text" name="message"
+                              class="form-control" th:field="*{initialMessage}"></textarea>
+                </div>
+
+                <div>
+                    <input type="file" name="document" accept=".docx,.pdf"/>
+                </div>
+
+                <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+
+                <button type="submit" class="save-button" style="margin-bottom: 0">Start new discussion</button>
+
+                <a id="go-back-button-from-create-new-discussion" class="btn" style="margin-top: 0" href="#" >Go back</a>
+
+            </form>
+
+        </div>
+
     </div>
 
     <!--    MEETINGS PAGE -->
@@ -405,6 +525,17 @@
             }
         });
 
+        $('#new-discussion-button').click(function () {
+            $('#new-discussions-button-wrapper').addClass('hidden');
+            $('#all-discussions-wrapper').addClass('hidden');
+            $('#add-new-discussions-wrapper').removeClass('hidden');
+        });
+
+        $('#go-back-button-from-create-new-discussion').click(function () {
+            $('#new-discussions-button-wrapper').removeClass('hidden');
+            $('#all-discussions-wrapper').removeClass('hidden');
+            $('#add-new-discussions-wrapper').addClass('hidden');
+        });
 
     });
 </script>

@@ -118,26 +118,26 @@
                     <div class="project-box-bottom">
                         <table class="table table-bordered table-striped">
                             <thead>
-                            <tr>
-                                <th style="width: 45%">Project title</th>
-                                <th style="width: 15%">Date submitted</th>
-                                <th style="width: 20%">Supervisor</th>
-                                <th style="width: 15%"></th>
-                            </tr>
+                                <tr>
+                                    <th style="width: 45%">Project title</th>
+                                    <th style="width: 15%">Date submitted</th>
+                                    <th style="width: 20%">Supervisor</th>
+                                    <th style="width: 15%"></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="project: ${allProjects}" th:if="${project.student.id == user.id}">
-                                <td class="flex-separate-items">
-                                    <p th:text="${project.suggestion.title}"></p>
-                                    <p th:if="${project.preferredOption == true}" class="preferred-project-label"
-                                       style="font-size: 0.8rem">Preferred option</p>
-                                </td>
-                                <td th:text="${project.startDate}"/>
-                                <td th:if="${project.supervisor == null}">Not assigned</td>
-                                <td th:if="${project.supervisor != null}"
-                                    th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"/>
-                                <td><a th:href="'/suggestions/' + ${project.id}">View suggestion form</a></td>
-                            </tr>
+                                <tr th:each="project: ${allProjects}" th:if="${project.student.id == user.id}">
+                                    <td class="flex-separate-items">
+                                        <p th:text="${project.suggestion.title}"></p>
+                                        <p th:if="${project.preferredOption == true}" class="preferred-project-label"
+                                           style="font-size: 0.8rem">Preferred option</p>
+                                    </td>
+                                    <td th:text="${project.startDate}"/>
+                                    <td th:if="${project.supervisor == null}">Not assigned</td>
+                                    <td th:if="${project.supervisor != null}"
+                                        th:text="${project.supervisor.firstName} + ' ' + ${project.supervisor.lastName}"/>
+                                    <td><a th:href="'/suggestions/' + ${project.id}">View suggestion form</a></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

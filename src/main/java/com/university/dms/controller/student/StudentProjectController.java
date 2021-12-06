@@ -5,11 +5,13 @@ import com.cloudmersive.client.invoker.ApiClient;
 import com.cloudmersive.client.invoker.ApiException;
 import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
+import com.university.dms.Utils.ProjectUtils;
 import com.university.dms.model.project.*;
 import com.university.dms.model.project.dissertationchapters.*;
 import com.university.dms.model.project.enums.ChapterStatus;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.user.User;
+import com.university.dms.model.utils.DiscussionWrapper;
 import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
@@ -122,6 +124,7 @@ public class StudentProjectController {
 
         List<ProjectStatus> allStatusesList = Arrays.asList(ProjectStatus.class.getEnumConstants());
         List<ProjectStatus> currentProjectStatuses = new ArrayList<>();
+        DiscussionWrapper discussionWrapper = new DiscussionWrapper();
 
         for(ProjectStatus projectStatus:allStatusesList){
             if(projectStatus==ProjectStatus.PROPOSAL_REJECTED){
@@ -141,6 +144,7 @@ public class StudentProjectController {
         model.addAttribute("user", user);
         model.addAttribute("project", project);
         model.addAttribute("currentProjectStatuses", currentProjectStatuses);
+        model.addAttribute("discussionWrapper", discussionWrapper);
 
         return "project/projectpage";
     }
@@ -163,36 +167,11 @@ public class StudentProjectController {
 
         Project project = projectService.findProjectById(uploadedFileWrapper.getProjectId());
 
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setConnectTimeout(30000);
-        defaultClient.setReadTimeout(30000);
-        ApiKeyAuth Apikey = (ApiKeyAuth) defaultClient.getAuthentication("Apikey");
-        Apikey.setApiKey("815982a1-05a5-426b-9638-ba085d169705");
-
         MultipartFile file = uploadedFileWrapper.getDocument();
 
         if (!file.isEmpty()) {
-            File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getName());
-            file.transferTo(convFile);
 
-            byte[] result = null;
-
-            if (file.getOriginalFilename().contains("pdf")) {
-
-                result = Files.readAllBytes(convFile.toPath());
-
-            } else {
-
-                ConvertDocumentApi apiInstance = new ConvertDocumentApi();
-                try {
-
-                    result = apiInstance.convertDocumentDocxToPdf(convFile);
-
-                } catch (ApiException e) {
-                    System.err.println("Exception when calling ConvertDocumentApi#convertDocumentDocxToPdf");
-                    e.printStackTrace();
-                }
-            }
+            byte[] result = ProjectUtils.convertWordToPDF(file);
 
             switch (type){
                 case "proposal":

@@ -1,10 +1,12 @@
 package com.university.dms.service.project;
 
+import com.university.dms.model.discussions.Discussion;
 import com.university.dms.model.project.Dissertation;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.project.Proposal;
 import com.university.dms.model.user.User;
+import com.university.dms.repository.project.DiscussionRepository;
 import com.university.dms.repository.project.DissertationRepository;
 import com.university.dms.repository.project.ProjectRepository;
 import com.university.dms.repository.project.ProposalRepository;
@@ -22,11 +24,14 @@ public class ProjectService {
 
     private final DissertationRepository dissertationRepository;
 
+    private final DiscussionRepository discussionRepository;
+
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository, DissertationRepository dissertationRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository, DissertationRepository dissertationRepository, DiscussionRepository discussionRepository) {
         this.projectRepository = projectRepository;
         this.proposalRepository = proposalRepository;
         this.dissertationRepository = dissertationRepository;
+        this.discussionRepository = discussionRepository;
     }
 
     public void saveProject(Project project) {
@@ -144,6 +149,10 @@ public class ProjectService {
 
     public void saveDissertation(Dissertation dissertation){
         dissertationRepository.save(dissertation);
+    }
+
+    public Discussion findDiscussionById(Integer id){
+        return discussionRepository.findDiscussionById(id);
     }
 
 }
