@@ -1,6 +1,7 @@
 package com.university.dms.model.user;
 
 import com.university.dms.model.AccountType;
+import com.university.dms.model.meetings.Meeting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -67,5 +69,4 @@ public class User {
 
     @Column(name="other_contact")
     private String other_contact;
-
 }

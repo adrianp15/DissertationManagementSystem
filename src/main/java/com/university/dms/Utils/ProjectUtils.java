@@ -29,13 +29,13 @@ public class ProjectUtils {
 
     public static DiscussionMessage getLatestMessage(Discussion discussion) {
 
-        DiscussionMessage latestDiscussion = discussion.getMessages().get(0);
+        DiscussionMessage latestDiscussion = discussion.getMessages().get(discussion.getMessages().size()-1);
 
-        for (DiscussionMessage discussionMessage : discussion.getMessages()) {
-            if(discussionMessage.getPostDate().isBefore(latestDiscussion.getPostDate())) {
-                latestDiscussion = discussionMessage;
-            }
-        }
+//        for (DiscussionMessage discussionMessage : discussion.getMessages()) {
+//            if(discussionMessage.getPostDate().isBefore(latestDiscussion.getPostDate())) {
+//                latestDiscussion = discussionMessage;
+//            }
+//        }
 
         return latestDiscussion;
 

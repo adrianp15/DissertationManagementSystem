@@ -202,3 +202,26 @@
     margin: 10px 0;
     width: 90%;
 }
+
+
+/* MEETINGS */
+
+.meeting-wrapper {
+    padding: 10px 30px;
+    border: 1px solid black;
+    margin: 10px;
+    display: inline-block;
+    width: 400px;
+    height: 100%;
+}
+
+.new-meeting-wrapper{
+    padding: 5px;
+    border: 1px solid black;
+    margin-right: 50px;
+}
+
+.new-meeting-wrapper p {
+    margin-top: 10px;
+    margin-bottom: 2px;
+}

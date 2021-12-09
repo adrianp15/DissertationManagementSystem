@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{../../css/style.css}">
+    <link rel="stylesheet" th:href="@{../../css/home.css}">
+    <link rel="stylesheet" th:href="@{../../css/projects.css}">
+    <link rel="stylesheet" th:href="@{../../css/profile.css}">
+
+
+    <title>Dissertation Management System</title>
+
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My Profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/student-my-projects}">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+
+<section class="page-content">
+    <div class="top-buttons">
+        <a id="meetings-button" class="projects-large-button" style="margin-right: 20px" th:href="'/' + ${project.id} + '/meetingspage'">Meetings</a>
+        <a id="new-meeting-button" class="projects-large-button selected-button" style="margin-right: 20px"
+           th:href="'/' + ${project.id} + '/new-meeting'">New meeting</a>
+        <a id="go-back-from-activity-plan" class="projects-large-button" th:href="'/projects/' + ${project.id}"
+           style="margin-right: 20px">Go back</a>
+    </div>
+
+    </div>
+
+    <!--    MEETINGS PAGE -->
+    <div class="content" id="meetings">
+        <h1>Schedule new meeting</h1>
+
+        <div class="new-meeting-wrapper">
+            <form id="new-meeting" th:action="@{/submitnewmeeting}" th:object="${meeting}" method="post" autocomplete="off">
+                <div class="content-flex" style="margin: 10px 0">
+                    <div class="left-side" style="margin: 0 2%">
+                        <p>Select date*</p>
+                        <input type="date" id="date" name="date" th:field="*{date}">
+
+                        <p>Select time*</p>
+                        <input type="time" id="time" name="time" th:field="*{time}">
+
+                        <p>Meeting duration*</p>
+                        <input id="duration" name="duration" type="number" th:field="*{duration}">
+
+                        <p>Meeting type</p>
+                        <select class="form-control" id="meetingType" name="meetingType">
+                            <option th:each="meetingType : ${T(com.university.dms.model.meetings.MeetingType).values()}"
+                                    th:value="${meetingType}"
+                                    th:text="${meetingType}"
+                            />
+                        </select>
+                        * required fields
+                    </div>
+                    <div class="right-side" style="margin: 0 2%">
+                        <p>Meeting platform</p>
+                        <select class="form-control" id="meetingPlatform" name="meetingPlatform">
+                            <option th:each="meetingPlatform : ${T(com.university.dms.model.meetings.MeetingPlatform).values()}"
+                                    th:value="${meetingPlatform}"
+                                    th:text="${meetingPlatform}"
+                            />
+                        </select>
+
+                        <p>Meeting link</p>
+                        <input id="meetingLink" name="meetingLink" type="text" style="width: 100%" th:field="*{meetingLink}">
+
+                        <p>Other details</p>
+                        <input id="otherDetails" name="otherDetails" type="otherDetails" style="width: 100%" th:field="*{otherDetails}">
+                        <br>
+
+                        <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+                        <button type="submit" class="general-button">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+</body>
+</html>

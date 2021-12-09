@@ -93,7 +93,9 @@
             Activity plan
         </button>
         <button id="discussionbutton" class="projects-large-button" style="margin-right: 20px">Discussions</button>
-        <button id="meetingsbutton" class="projects-large-button" style="margin-right: 20px">Meetings</button>
+        <a id="meetingsbutton" class="projects-large-button" style="margin-right: 20px" th:href="'/' + ${project.id} + '/meetingspage'">Meetings</a>
+        <a th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="supervisory-records" class="projects-large-button" style="margin-right: 20px" th:href="'/' + ${project.id} + '/supervisory-records'">Supervisory records</a>
+
     </div>
 
     <!--    ACTIVITY PLAN PAGE -->
