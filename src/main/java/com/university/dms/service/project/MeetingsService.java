@@ -5,6 +5,7 @@ import com.university.dms.model.user.User;
 import com.university.dms.repository.project.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,15 @@ public class MeetingsService {
 
     public void saveMeeting(Meeting meeting){
         meetingRepository.save(meeting);
+    }
+
+    public Meeting findMeetingByID(Integer id){
+        return meetingRepository.findMeetingById(id);
+    }
+
+    @Transactional
+    public void deleteMeetingByID(Integer id){
+        meetingRepository.deleteMeetingById(id);
     }
 
 }

@@ -47,15 +47,22 @@ public class SupervisoryRecord {
     @Column(name = "student_complete_agreed_points")
     private String studentCompleteAgreedPoints;
 
-    @Column(name = "points_coved_in_meeting")
+    @Column(name = "points_coved_in_meeting", columnDefinition = "TEXT")
     private String pointsCoveredInMeeting;
 
-    @Column(name = "agreed_points_from_meeting")
+    @Column(name = "agreed_points_from_meeting", columnDefinition = "TEXT")
     private String agreedPointsFromMeeting;
 
     @Column(name = "student_commitment")
-    private Integer studentCommitment;
+    private String studentCommitment;
 
-    @Column(name = "concerns")
+    @Column(name = "concerns", columnDefinition = "TEXT")
     private String concerns;
+
+    @Column(name = "project_id")
+    private String projectId;
+
+    public String getFormattedDate(){
+        return date.toString().substring(0,10);
+    }
 }

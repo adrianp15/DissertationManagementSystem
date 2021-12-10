@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{../../css/style.css}">
+    <link rel="stylesheet" th:href="@{../../css/home.css}">
+    <link rel="stylesheet" th:href="@{../../css/projects.css}">
+    <link rel="stylesheet" th:href="@{../../css/profile.css}">
+
+    <link rel='stylesheet' href='webjars/fullcalendar/3.8.0/dist/fullcalendar.css'/>
+    <script src='webjars/moment/2.19.1/min/moment.min.js'></script>
+    <script src='webjars/fullcalendar/3.8.0/dist/fullcalendar.js'></script>
+    <script src="../../static/js/gcal.min.js"></script>
+    <script src="../../static/js/calendar.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.print.min.css " rel="stylesheet"
+          type="text/css" media="print"/>
+
+
+    <title>Dissertation Management System</title>
+
+</head>
+
+<body>
+<nav>
+    <a th:href="@{/home}" class="logo">
+        Dissertation Management System
+    </a>
+
+    <div class="dropdownmenu">
+        <div class="user-name-container">
+            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
+            <p class="name-of-user" th:text="${user.firstName} + ' ' + ${user.lastName}">
+                Name
+            </p>
+            <div class="dropdown-content">
+                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
+
+                <div style="display: flex">
+                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/profile}">My Profile</a>
+                </div>
+                <div style="display: flex">
+                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/student-my-projects}">My Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+        <a href="#">Notifications</a>
+        <a href="#">Notes</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/supervisor-my-projects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
+    <div class="sidenav">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/users}">Users</a>
+        <a th:href="@{/coordinatorviewprojects}">Projects</a>
+        <a href="#">Ideas</a>
+        <a href="#">Forum</a>
+    </div>
+</section>
+
+
+<section class="page-content">
+    <div class="top-buttons">
+        <button id="meetings-button" class="projects-large-button selected-button" style="margin-right: 20px">
+            Supervisory records
+        </button>
+        <a id="go-back-from-activity-plan" class="projects-large-button" th:href="'/projects/' + ${project.id}"
+           style="margin-right: 20px">Go back</a>
+    </div>
+
+    </div>
+
+    <!--    MEETINGS PAGE -->
+    <div class="content" id="meetings">
+        <h1>Supervisory records</h1>
+
+        <div class="supervisory-record-form-container">
+            <form id="registration" th:action="@{/submit-supervisory-record}" th:object="${supervisoryRecord}"
+                  method="post"
+                  autocomplete="off">
+                <p>1. Supervisor's Name and Surname</p>
+                <input readonly type="text" id="supervisorName"
+                       th:value="${project.supervisor.firstName + ' ' + project.supervisor.lastName}"
+                       class="form-control"/>
+
+                <p>2. Student's Name and Surname</p>
+                <input readonly type="text" id="studentName"
+                       th:value="${project.student.firstName + ' ' + project.student.lastName}"
+                       class="form-control"/>
+
+                <p>3. Date of Session*</p>
+                <input type="date" id="date" th:name="date" th:field="*{date}">
+
+                <p>4. Contact Format*</p>
+                <input type="radio" id="contactFormat1" th:name="contactFormat" value="In Person (Face-to-Face)">
+                <label for="contactFormat1">In Person (Face-to-Face)</label><br>
+                <input type="radio" id="contactFormat2" th:name="contactFormat" value="Online Session">
+                <label for="contactFormat2">Online Session</label><br>
+                <input type="radio" id="contactFormat3" th:name="contactFormat" value="Phone Call">
+                <label for="contactFormat3">Phone Call</label><br>
+                <input type="radio" id="contactFormat4" th:name="contactFormat" value="Email">
+                <label for="contactFormat4">Email</label><br>
+                <input type="radio" id="contactFormat5">
+                <input type="text" id="contactFormat6" th:name="contactFormat" placeholder="Other" class="form-control"
+                       style="display:inline-block; max-width: 400px"/>
+
+                <p>5. Attendance / Communication / Timely Response from Student*</p>
+                <input type="radio" id="studentAttendance1" th:name="studentAttendance" value="Session - Attended">
+                <label for="studentAttendance1">Session - Attended</label><br>
+                <input type="radio" id="studentAttendance2" th:name="studentAttendance" value="Session - Not Attended">
+                <label for="studentAttendance2">Session - Not Attended</label><br>
+                <input type="radio" id="studentAttendance3" th:name="studentAttendance" value="Session - Joined Late">
+                <label for="studentAttendance3">Session - Joined Late</label><br>
+                <input type="radio" id="studentAttendance4" th:name="studentAttendance" value="Session - Left Early">
+                <label for="studentAttendance4">Session - Left Early</label><br>
+                <input type="radio" id="studentAttendance5" th:name="studentAttendance" value="Session - Interrupted">
+                <label for="studentAttendance5">Session - Interrupted</label><br>
+                <input type="radio" id="studentAttendance6" th:name="studentAttendance" value="Session - Cancelled">
+                <label for="studentAttendance6">Session - Cancelled</label><br>
+                <input type="radio" id="studentAttendance7" th:name="studentAttendance"
+                       value="Email - Timely Response (within 2 days)">
+                <label for="studentAttendance7">Email - Timely Response (within 2 days)</label><br>
+                <input type="radio" id="studentAttendance8" th:name="studentAttendance"
+                       value="Email - Delayed Response (3 - 5 days)">
+                <label for="studentAttendance8">Email - Delayed Response (3 - 5 days)</label><br>
+                <input type="radio" id="studentAttendance9" th:name="studentAttendance"
+                       value="Email - Late Response (more than 5 days)">
+                <label for="studentAttendance9">Email - Late Response (more than 5 days)</label><br>
+                <input type="radio" id="studentAttendance10" th:name="studentAttendance"
+                       value="Email - No response received">
+                <label for="studentAttendance10">Email - No response received</label><br>
+
+                <p>6. If the student did NOT attend the meeting, have they provided a reason?*</p>
+                <input type="radio" id="reasonStudentNotAttending1" th:name="reasonStudentNotAttending" value="N/A">
+                <label for="reasonStudentNotAttending1">N/A</label><br>
+                <input type="radio" id="reasonStudentNotAttending2" th:name="reasonStudentNotAttending"
+                       value="Not Attended - No reasons given">
+                <label for="reasonStudentNotAttending2">Not Attended - No reasons given</label><br>
+                <input type="radio" id="reasonStudentNotAttending3" th:name="reasonStudentNotAttending"
+                       value="Not Attended - Unwell / Sick">
+                <label for="reasonStudentNotAttending3">Not Attended - Unwell / Sick</label><br>
+                <input type="radio" id="reasonStudentNotAttending4" th:name="reasonStudentNotAttending"
+                       value="Not Attended - Family Commitments">
+                <label for="reasonStudentNotAttending4">Not Attended - Family Commitments</label><br>
+                <input type="radio" id="reasonStudentNotAttending5" th:name="reasonStudentNotAttending"
+                       value="Not Attended - Work Commitments">
+                <label for="reasonStudentNotAttending5">Not Attended - Work Commitments</label><br>
+                <input type="radio" id="reasonStudentNotAttending6">
+                <input type="text" id="reasonStudentNotAttending7" th:name="reasonStudentNotAttending"
+                       placeholder="Other" class="form-control" style="display:inline-block; max-width: 400px"/>
+
+                <p>7. Has the student completed the agreed action points from the last meeting?*</p>
+                <input type="radio" id="studentCompleteAgreedPoints1" th:name="studentCompleteAgreedPoints" value="Yes">
+                <label for="studentCompleteAgreedPoints1">Yes</label><br>
+                <input type="radio" id="studentCompleteAgreedPoints2" th:name="studentCompleteAgreedPoints"
+                       value="Partially">
+                <label for="studentCompleteAgreedPoints2">Partially</label><br>
+                <input type="radio" id="studentCompleteAgreedPoints3" th:name="studentCompleteAgreedPoints" value="No">
+                <label for="studentCompleteAgreedPoints3">No</label><br>
+                <input type="radio" id="studentCompleteAgreedPoints4" th:name="studentCompleteAgreedPoints"
+                       value="1st Meeting">
+                <label for="studentCompleteAgreedPoints4">1st Meeting</label><br>
+
+                <p>8. Points covered in this meeting? <br>(Please provide a brief overview / summary of the points
+                    covered in this meeting)*</p>
+                <textarea type="text" th:name="pointsCoveredInMeeting"
+                          class="form-control"
+                          placeholder="Enter your answer"
+                          style="height: 300px !important;"></textarea>
+
+                <p>9. Agreed action points from meeting? <br>(Please provide details of the actions that the student has
+                    agreed to undertake following this meeting and the deadlines set)*</p>
+                <textarea type="text" th:name="agreedPointsFromMeeting"
+                          class="form-control"
+                          placeholder="Enter your answer"
+                          style="height: 300px !important;"></textarea>
+
+                <p>10. Rate the student's commitment to their dissertation (1 - Lowest, 10 - Highest)*</p>
+                <input type="radio" id="studentCommitment1" th:name="studentCommitment" value="1">
+                <label for="studentCommitment1">1</label>
+                <input type="radio" id="studentCommitment2" th:name="studentCommitment" value="2">
+                <label for="studentCommitment1">2</label>
+                <input type="radio" id="studentCommitment3" th:name="studentCommitment" value="3">
+                <label for="studentCommitment1">3</label>
+                <input type="radio" id="studentCommitment4" th:name="studentCommitment" value="4">
+                <label for="studentCommitment1">4</label>
+                <input type="radio" id="studentCommitment5" th:name="studentCommitment" value="5">
+                <label for="studentCommitment1">5</label>
+                <input type="radio" id="studentCommitment6" th:name="studentCommitment" value="6">
+                <label for="studentCommitment1">6</label>
+                <input type="radio" id="studentCommitment7" th:name="studentCommitment" value="7">
+                <label for="studentCommitment1">7</label>
+                <input type="radio" id="studentCommitment8" th:name="studentCommitment" value="8">
+                <label for="studentCommitment1">8</label>
+                <input type="radio" id="studentCommitment9" th:name="studentCommitment" value="9">
+                <label for="studentCommitment1">9</label>
+                <input type="radio" id="studentCommitment10" th:name="studentCommitment" value="10">
+                <label for="studentCommitment1">10</label>
+
+                <p>11. Are there any causes of concern that you would like to raise about this student's progress *</p>
+                <input type="radio" id="concerns1" th:name="concerns" value="No">
+                <label for="concerns1">No</label><br>
+                <input type="radio" id="concerns2" th:name="concerns"
+                       value="Yes - Please contact the Dissertations Coordinator">
+                <label for="concerns2">Yes - Please contact the Dissertations Coordinator</label><br>
+                <input type="radio" id="concerns3">
+                <input type="text" id="concerns4" th:name="concerns" placeholder="Other" class="form-control"
+                       style="display:inline-block; max-width: 400px"/>
+                <br>
+                <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+
+                <button type="submit" class="coordinator-confirm-supervisor-button">Submit</button>
+                <a style="display: inline-block" th:href="'/projects/' + ${project.id}" class="save-button">Go to
+                    project page</a>
+
+            </form>
+        </div>
+
+    </div>
+
+
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('#contactFormat5').change(function () {
+            $('input[type=radio][name="contactFormat"]').prop('checked', false);
+        });
+        $('input[type=radio][name="contactFormat"]').change(function () {
+            $('input[type=radio][id="contactFormat5"]').prop('checked', false);
+            document.getElementById("contactFormat6").value = '';
+        });
+
+        $('#reasonStudentNotAttending6').change(function () {
+            $('input[type=radio][name="reasonStudentNotAttending"]').prop('checked', false);
+        });
+        $('input[type=radio][name="reasonStudentNotAttending"]').change(function () {
+            $('input[type=radio][id="reasonStudentNotAttending6"]').prop('checked', false);
+            document.getElementById("reasonStudentNotAttending7").value = '';
+        });
+
+        $('#concerns3').change(function () {
+            $('input[type=radio][name="concerns"]').prop('checked', false);
+        });
+        $('input[type=radio][name="concerns"]').change(function () {
+            $('input[type=radio][id="concerns3"]').prop('checked', false);
+            document.getElementById("concerns4").value = '';
+        });
+
+    });
+</script>
+
+</body>
+</html>

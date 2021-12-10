@@ -131,6 +131,9 @@
 
                     <p class="font-weight-bold" style="margin-bottom: 1px; font-size: 18px">Other details</p>
                     <p style="word-wrap: break-word;" th:text="${meeting.otherDetails eq ''} ? 'None' : ${meeting.meetingLink}"></p>
+
+                    <a id="delete-meeting-button" class="projects-large-button" style="margin-right: 20px"
+                       th:href="'/' + ${meeting.id} + '/delete-meeting'">Cancel meeting</a>
                 </div>
 
             </div>

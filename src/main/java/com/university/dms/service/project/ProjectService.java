@@ -3,13 +3,11 @@ package com.university.dms.service.project;
 import com.university.dms.model.discussions.Discussion;
 import com.university.dms.model.project.Dissertation;
 import com.university.dms.model.project.Project;
+import com.university.dms.model.project.SupervisoryRecord;
 import com.university.dms.model.project.enums.ProjectStatus;
 import com.university.dms.model.project.Proposal;
 import com.university.dms.model.user.User;
-import com.university.dms.repository.project.DiscussionRepository;
-import com.university.dms.repository.project.DissertationRepository;
-import com.university.dms.repository.project.ProjectRepository;
-import com.university.dms.repository.project.ProposalRepository;
+import com.university.dms.repository.project.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +24,15 @@ public class ProjectService {
 
     private final DiscussionRepository discussionRepository;
 
+    private final SupervisoryRecordRepository supervisoryRecordRepository;
+
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository, DissertationRepository dissertationRepository, DiscussionRepository discussionRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProposalRepository proposalRepository, DissertationRepository dissertationRepository, DiscussionRepository discussionRepository, SupervisoryRecordRepository supervisoryRecordRepository) {
         this.projectRepository = projectRepository;
         this.proposalRepository = proposalRepository;
         this.dissertationRepository = dissertationRepository;
         this.discussionRepository = discussionRepository;
+        this.supervisoryRecordRepository = supervisoryRecordRepository;
     }
 
     public void saveProject(Project project) {
@@ -155,4 +156,15 @@ public class ProjectService {
         return discussionRepository.findDiscussionById(id);
     }
 
+    public void saveSupervisoryRecord(SupervisoryRecord supervisoryRecord) {
+        supervisoryRecordRepository.save(supervisoryRecord);
+    }
+
+    public List<SupervisoryRecord> findAllBySupervisor(User user) {
+        return supervisoryRecordRepository.findAllBySupervisor(user);
+    }
+
+    public SupervisoryRecord findSupervisoryRecordById(Integer id){
+        return supervisoryRecordRepository.findSupervisoryRecordById(id);
+    }
 }

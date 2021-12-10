@@ -99,4 +99,15 @@ public class MeetingsController {
         return "redirect:/" + project.getId() + "/meetingspage";
     }
 
+    @GetMapping(value = "/{id}/delete-meeting")
+    public String deleteMeeting(Model model,  @PathVariable("id") String id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        String projectId = meetingsService.findMeetingByID(Integer.parseInt(id)).getProjectId();
+        meetingsService.deleteMeetingByID(Integer.parseInt(id));
+
+        return "redirect:/" + projectId + "/meetingspage";
+    }
+
 }

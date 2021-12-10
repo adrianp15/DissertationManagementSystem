@@ -22,7 +22,7 @@ public class Meeting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

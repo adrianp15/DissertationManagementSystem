@@ -10,13 +10,17 @@ import com.university.dms.model.user.User;
 import com.university.dms.model.utils.UploadedFileWrapper;
 import com.university.dms.service.project.ProjectService;
 import com.university.dms.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -347,6 +351,75 @@ public class SupervisorController {
 
             return "redirect:/projects/" + project.getId() + "/chapter6";
         }
+    }
+
+    @GetMapping(value = "/{id}/supervisory-records")
+    public String viewSupervisoryRecordsPage(Model model,  @PathVariable("id") String id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+       List<SupervisoryRecord> supervisoryRecords = projectService.findAllBySupervisor(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("project", project);
+        model.addAttribute("supervisoryRecords", supervisoryRecords);
+        return "supervisor/supervisoryrecords";
+    }
+
+    @GetMapping(value = "/{id}/new-supervisory-record")
+    public String newSupervisoryRecord(Model model,  @PathVariable("id") String id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(id));
+
+        SupervisoryRecord supervisoryRecord = new SupervisoryRecord();
+
+        model.addAttribute("user", user);
+        model.addAttribute("project", project);
+        model.addAttribute("supervisoryRecord", supervisoryRecord);
+        return "supervisor/newsupervisoryrecord";
+    }
+
+    @GetMapping(value = "/supervisory-record/{projectid}/{recordid}")
+    public String viewSupervisoryRecord(Model model,  @PathVariable("projectid") String projectid, @PathVariable("recordid") String recordid){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(projectid));
+
+        SupervisoryRecord supervisoryRecord = projectService.findSupervisoryRecordById(Integer.parseInt(recordid));
+
+        model.addAttribute("user", user);
+        model.addAttribute("project", project);
+        model.addAttribute("supervisoryRecord", supervisoryRecord);
+        return "supervisor/viewrecord";
+    }
+
+    @PostMapping(value = "/submit-supervisory-record")
+    public String submitNewMeeting(@Valid @ModelAttribute("supervisoryRecord") SupervisoryRecord supervisoryRecord, BindingResult result, ModelMap model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        Project project = projectService.findProjectById(Integer.parseInt(supervisoryRecord.getProjectId()));
+
+        if(supervisoryRecord.getDate() == null || StringUtils.isBlank(supervisoryRecord.getContactFormat()) || StringUtils.isBlank(supervisoryRecord.getStudentAttendance()) ||
+                StringUtils.isBlank(supervisoryRecord.getReasonStudentNotAttending()) || StringUtils.isBlank(supervisoryRecord.getStudentCompleteAgreedPoints()) ||
+                StringUtils.isBlank(supervisoryRecord.getPointsCoveredInMeeting()) || StringUtils.isBlank(supervisoryRecord.getAgreedPointsFromMeeting()) ||
+                StringUtils.isBlank(supervisoryRecord.getStudentCommitment()) || StringUtils.isBlank(supervisoryRecord.getConcerns())){
+            model.addAttribute("user", user);
+            model.addAttribute("project", project);
+            model.addAttribute("supervisoryRecord", supervisoryRecord);
+            return "supervisor/newsupervisoryrecord";
+        } else {
+            supervisoryRecord.setStudent(project.getStudent());
+            supervisoryRecord.setSupervisor(project.getSupervisor());
+            projectService.saveSupervisoryRecord(supervisoryRecord);
+        }
+
+        return "redirect:/" + project.getId() + "/supervisory-records";
     }
 
 }

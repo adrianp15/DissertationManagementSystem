@@ -106,9 +106,12 @@
     <div class="content" id="meetings">
         <h1>Supervisory records</h1>
 
+        <div th:each="record, count:${supervisoryRecords}">
+            <p style="font-size: 20px">Supervisory record
+                <span th:text="${count.count}"></span> - <span th:text="${record.getFormattedDate()}"></span> -
+                <a th:href="'/supervisory-record/' + ${project.id} + '/' + ${record.id}">Select</a></p>
 
-
-    </div>
+        </div>
 
 
 </section>
