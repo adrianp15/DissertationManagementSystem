@@ -28,8 +28,4 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("FROM Project p WHERE p.student.email LIKE %:email%")
     List<Project> findByStudent_email(@Param("email") String email);
 
-
-
-
-
 }

@@ -15,8 +15,15 @@
     <link rel="stylesheet" th:href="@{../../css/home.css}">
     <link rel="stylesheet" th:href="@{../../css/projects.css}">
     <link rel="stylesheet" th:href="@{../../css/profile.css}">
-
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
     <title>Dissertation Management System</title>
 
 </head>
@@ -79,71 +86,40 @@
 
 
 <section class="page-content">
-    <div class="top-buttons">
-        <a id="meetings-button" class="projects-large-button" style="margin-right: 20px" th:href="'/' + ${project.id} + '/meetingspage'">Meetings</a>
-        <a id="new-meeting-button" class="projects-large-button selected-button" style="margin-right: 20px"
-           th:href="'/' + ${project.id} + '/new-meeting'">New meeting</a>
-        <a id="go-back-from-activity-plan" class="projects-large-button" th:href="'/projects/' + ${project.id}"
-           style="margin-right: 20px">Go back</a>
-    </div>
 
-    </div>
+    <!--    DISCUSSIONS PAGE-->
+    <div class="content" id="discussions">
+        <div class="discussions-wrapper">
+            <h4 th:text="${forumTopic.title}"></h4>
+            <div th:each="post: ${forumTopic.posts} ">
+                <div class="discussions-wrapper" style="width: auto">
+                    <p style="background: bisque" th:text="${post.message}"></p>
 
-    <!--    MEETINGS PAGE -->
-    <div class="content" id="meetings">
-        <h1>Schedule new meeting</h1>
-
-        <div class="new-meeting-wrapper">
-            <form id="new-meeting" th:action="@{/submitnewmeeting}" th:object="${meeting}" method="post" autocomplete="off">
-                <div class="content-flex" style="margin: 10px 0">
-                    <div class="left-side" style="margin: 0 2%">
-                        <p>Select date*</p>
-                        <input type="date" id="date" name="date" th:field="*{date}">
-
-                        <p>Select time*</p>
-                        <input type="time" id="time" name="time" th:field="*{time}">
-
-                        <p>Meeting duration*</p>
-                        <input id="duration" name="duration" type="number" th:field="*{duration}">
-
-                        <p>Meeting type</p>
-                        <select class="form-control" id="meetingType" name="meetingType">
-                            <option th:each="meetingType : ${T(com.university.dms.model.meetings.MeetingType).values()}"
-                                    th:value="${meetingType}"
-                                    th:text="${meetingType}"
-                            />
-                        </select>
-                        * required fields
-                    </div>
-                    <div class="right-side" style="margin: 0 2%">
-                        <p>Meeting platform</p>
-                        <select class="form-control" id="meetingPlatform" name="meetingPlatform">
-                            <option th:each="meetingPlatform : ${T(com.university.dms.model.meetings.MeetingPlatform).values()}"
-                                    th:value="${meetingPlatform}"
-                                    th:text="${meetingPlatform}"
-                            />
-                        </select>
-
-                        <p>Meeting link</p>
-                        <input id="meetingLink" name="meetingLink" type="text" style="width: 100%" th:field="*{meetingLink}">
-
-                        <p>Other details</p>
-                        <input id="otherDetails" name="otherDetails" type="otherDetails" style="width: 100%" th:field="*{otherDetails}">
-                        <br>
-
-                        <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
-                        <button type="submit" class="general-button">Submit</button>
-                    </div>
+                    <p>Posted by: <span th:text="${post.postedBy.firstName + ' ' + post.postedBy.lastName + ' on ' + post.postDate}"></span></p>
                 </div>
-            </form>
-        </div>
+            </div>
 
+            <form th:action="@{/submit-new-forum-post}" th:object="${forumPostWrapper}" method="post" autocomplete="off">
+                <h4>Post new message</h4>
+                <div class="input-group" style="margin-bottom: 10px">
+                    <textarea type="text" name="title"
+                              class="form-control" th:field="*{message}"></textarea>
+                </div>
+
+                <input type="text" name="topicId" th:value="${forumTopic.id}" style="display: none"/>
+
+                <button type="submit" class="save-button" style="margin-bottom: 0">Post message</button>
+                <a class="btn" style="margin-top: 0" th:href="@{/forum}">Go back</a>
+            </form>
+
+
+        </div>
 
     </div>
 
 
 </section>
 
-
 </body>
+
 </html>

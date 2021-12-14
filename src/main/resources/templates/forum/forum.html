@@ -86,59 +86,86 @@
 
 
 <section class="page-content">
-    <div class="top-buttons">
-        <button id="discussionbutton" class="projects-large-button" style="margin-right: 20px">Discussions</button>
-        <a id="go-back-from-activity-plan" class="projects-large-button" th:href="'/projects/' + ${project.id}" style="margin-right: 20px">Go back</a>
-    </div>
 
-    <!--    DISCUSSIONS PAGE-->
+
+    <!--    FORUM PAGE-->
     <div class="content" id="discussions">
-        <div class="discussions-wrapper">
-            <h4 th:text="${discussion.title}"></h4>
-            <div th:each="message: ${discussion.messages} ">
-                <div class="discussions-wrapper" style="width: auto">
-                    <p style="background: bisque" th:text="${message.message}"></p>
-                    <p style="margin-bottom: 2px">Attachments:
-                        <span th:if="${message.attachment == null}">No file attached</span>
-                        <a th:if="${message.attachment != null}" th:href="'/getmessagedocument/' + ${message.id} + '/' + ${project.id}">Download attachment</a>
+        <h2>Forum </h2>
+        <div id="new-forum-post-button-wrapper" class="discussions-wrapper">
+            <a id="new-forum-topic-button" class="btn" style="margin-top: 0" href="#">Create new forum post</a>
+        </div>
 
-                    </p>
-                    <p>Posted by: <span th:text="${message.postedBy.firstName + ' ' + message.postedBy.lastName + ' on ' + message.postDate}"></span></p>
-                </div>
+        <div id="all-forum-posts-wrapper" class="discussions-wrapper">
+            <table th:if="${forumTopics.size() > 0}" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th style="width: 60%">Topic title</th>
+                    <th style="width: 15%">Replies</th>
+                    <th style="width: 35%">Last post by</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="topic : ${forumTopics}">
+                    <td>
+                        <a th:text="${topic.title}"
+                           th:href="'/forum/' + ${topic.id}"></a>
+                    </td>
+                    <td th:text="${topic.posts.size()}"></td>
+                    <td>
+                        <p th:text="${topic.posts.get(topic.posts.size()-1).postedBy.firstName + ' ' + topic.posts.get(topic.posts.size()-1).postedBy.lastName}"></p>
+                        <p th:text="${topic.posts.get(topic.posts.size()-1).postDate}"></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${forumTopics.size() == 0}">
+                <h4>No topics posted yet. Start a new topic by pressing the button above.</h4>
             </div>
+        </div>
 
-            <form th:action="@{/submit-new-message}" th:object="${newMessageWrapper}" method="post" enctype="multipart/form-data">
-                <h4>Post new message</h4>
-                <div class="input-group" style="margin-bottom: 10px">
+        <div id="add-new-forum-post-wrapper" class="discussions-wrapper hidden">
+            <h4 class="project-phase-title">Create new topic</h4>
+            <form th:action="@{/submit-new-forum-topic}" th:object="${forumTopicWrapper}" method="post"
+                  autocomplete="off">
+                <h5>Title</h5>
+                <div class="input-group">
                     <textarea type="text" name="title"
-                              class="form-control" th:field="*{message}"></textarea>
+                              class="form-control" th:field="*{title}"></textarea>
                 </div>
 
-                <div>
-                    <input type="file" name="document" accept=".docx,.pdf"/>
+                <h5>Message</h5>
+                <div class="input-group">
+                    <textarea style="height: 100px; margin-bottom: 15px" type="text" name="message"
+                              class="form-control" th:field="*{initialMessage}"></textarea>
                 </div>
 
-                <input type="text" name="projectId" th:value="${project.id}" style="display: none"/>
+                <button type="submit" class="save-button" style="margin-bottom: 0">Start new topic</button>
 
-                <input type="text" name="discussionId" th:value="${discussion.id}" style="display: none"/>
-
-                <button type="submit" class="save-button" style="margin-bottom: 0">Post message</button>
+                <a id="go-back-button-from-add-new-forum-topic" class="btn" style="margin-top: 0" href="#">Go back</a>
             </form>
-
 
         </div>
 
     </div>
 
-    <!--    MEETINGS PAGE -->
-    <div class="content hidden" id="meetings">
-        <h1>Meetings</h1>
-    </div>
-
-
 </section>
 
 
 </body>
+
+<script>
+    $('#new-forum-topic-button').click(function () {
+        $('#new-forum-post-button-wrapper').addClass('hidden');
+        $('#all-forum-posts-wrapper').addClass('hidden');
+        $('#add-new-forum-post-wrapper').removeClass('hidden');
+    });
+
+    $('#go-back-button-from-add-new-forum-topic').click(function () {
+        $('#new-forum-post-button-wrapper').removeClass('hidden');
+        $('#all-forum-posts-wrapper').removeClass('hidden');
+        $('#add-new-forum-post-wrapper').addClass('hidden');
+    });
+</script>
 
 </html>

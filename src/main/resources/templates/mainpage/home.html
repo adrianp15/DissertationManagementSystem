@@ -47,9 +47,7 @@
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/student-my-projects}">My Projects</a>
         <a href="#">Ideas</a>
-        <a href="#">Forum</a>
-        <a href="#">Notifications</a>
-        <a href="#">Notes</a>
+        <a th:href="@{/forum}">Forum</a>
     </div>
 </section>
 
@@ -59,7 +57,7 @@
         <a th:href="@{/users}">Users</a>
         <a th:href="@{/coordinatorviewprojects}">Projects</a>
         <a href="#">Ideas</a>
-        <a href="#">Forum</a>
+        <a th:href="@{/forum}">Forum</a>
     </div>
 </section>
 
@@ -68,7 +66,7 @@
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/supervisor-my-projects}">Projects</a>
         <a href="#">Ideas</a>
-        <a href="#">Forum</a>
+        <a th:href="@{/forum}">Forum</a>
     </div>
 </section>
 
@@ -101,17 +99,7 @@
 
         <div class="box">
             <i class="fab fa-stack-exchange fa-4x"></i><br>
-            <a th:href="@{/#}">FORUM</a>
-        </div>
-
-        <div class="box">
-            <i class="fas fa-bell fa-4x"></i><br>
-            <a th:href="@{/#}">NOTIFICATIONS</a>
-        </div>
-
-        <div th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" class="box">
-            <i class="fas fa-sticky-note fa-4x"></i><br>
-            <a th:href="@{/#}">NOTES</a>
+            <a th:href="@{/forum}">FORUM</a>
         </div>
     </div>
 

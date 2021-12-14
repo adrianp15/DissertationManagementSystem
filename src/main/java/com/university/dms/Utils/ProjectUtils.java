@@ -7,6 +7,8 @@ import com.cloudmersive.client.invoker.Configuration;
 import com.cloudmersive.client.invoker.auth.ApiKeyAuth;
 import com.university.dms.model.discussions.Discussion;
 import com.university.dms.model.discussions.DiscussionMessage;
+import com.university.dms.model.forum.ForumPost;
+import com.university.dms.model.forum.ForumTopic;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.project.ProposalMarking;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,14 +33,12 @@ public class ProjectUtils {
 
         DiscussionMessage latestDiscussion = discussion.getMessages().get(discussion.getMessages().size()-1);
 
-//        for (DiscussionMessage discussionMessage : discussion.getMessages()) {
-//            if(discussionMessage.getPostDate().isBefore(latestDiscussion.getPostDate())) {
-//                latestDiscussion = discussionMessage;
-//            }
-//        }
-
         return latestDiscussion;
 
+    }
+
+    public ForumPost getLatestForumPost(ForumTopic forumTopic){
+        return forumTopic.getPosts().get(forumTopic.getPosts().size()-1);
     }
 
     public static byte[] convertWordToPDF(MultipartFile file) throws IOException {

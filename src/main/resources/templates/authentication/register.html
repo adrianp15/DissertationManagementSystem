@@ -70,7 +70,7 @@
                            class="form-control" th:field="*{userName}"/>
                 </div>
                 <p class="error-message"
-                   th:each="error : ${#fields.errors('username')}" th:text="${error}">Validation
+                   th:each="error : ${#fields.errors('userName')}" th:text="${error}">Validation
                     error</p>
 
                 <div class="input-group mb-3" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
