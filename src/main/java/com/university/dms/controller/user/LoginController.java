@@ -33,12 +33,6 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
 
-//        ArrayList<String> accTypes = new ArrayList<>();
-//        accTypes.add("Student");
-//        accTypes.add("Supervisor");
-//
-//        modelAndView.addObject("accTypes", accTypes);
-
         modelAndView.addObject("user", user);
         modelAndView.setViewName("/authentication/register");
         return modelAndView;

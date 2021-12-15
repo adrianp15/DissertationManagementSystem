@@ -33,7 +33,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Controller
-public class StudentProjectController {
+public class StudentController {
 
     @Autowired
     private UserService userService;
