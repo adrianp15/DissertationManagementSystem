@@ -1,5 +1,6 @@
 package com.university.dms.controller.meetings;
 
+import com.university.dms.model.AccountType;
 import com.university.dms.model.meetings.Meeting;
 import com.university.dms.model.project.Project;
 import com.university.dms.model.user.User;
@@ -44,8 +45,16 @@ public class MeetingsController {
 
         Project project = projectService.findProjectById(Integer.parseInt(id));
 
-        List<Meeting> meetings1 = meetingsService.findAllByStudent(user);
-        List<Meeting> meetings2 = meetingsService.findAllBySupervisor(user);
+        List<Meeting> meetings1;
+        List<Meeting> meetings2;
+
+        if(user.getAccountType() == AccountType.COORDINATOR){
+            meetings1 = meetingsService.findAllByStudent(project.getStudent());
+            meetings2 = meetingsService.findAllBySupervisor(project.getSupervisor());
+        } else {
+            meetings1 = meetingsService.findAllByStudent(user);
+            meetings2 = meetingsService.findAllBySupervisor(user);
+        }
 
         Set<Meeting> meetings = new HashSet<>();
         meetings.addAll(meetings1);

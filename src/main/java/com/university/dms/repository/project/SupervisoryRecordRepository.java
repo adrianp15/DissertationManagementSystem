@@ -11,4 +11,6 @@ public interface SupervisoryRecordRepository extends JpaRepository<SupervisoryRe
     List<SupervisoryRecord> findAllBySupervisor(User user);
 
     SupervisoryRecord findSupervisoryRecordById(Integer id);
+
+    List<SupervisoryRecord> findAllByProjectId(String id);
 }

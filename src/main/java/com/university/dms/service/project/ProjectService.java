@@ -160,6 +160,10 @@ public class ProjectService {
         supervisoryRecordRepository.save(supervisoryRecord);
     }
 
+    public List<SupervisoryRecord> findAllSupervisoryByProjectId(String id) {
+        return supervisoryRecordRepository.findAllByProjectId(id);
+    }
+
     public List<SupervisoryRecord> findAllBySupervisor(User user) {
         return supervisoryRecordRepository.findAllBySupervisor(user);
     }

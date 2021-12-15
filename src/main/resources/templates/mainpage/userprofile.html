@@ -16,60 +16,7 @@
 </head>
 
 <body>
-<nav>
-    <a th:href="@{/home}" class="logo">
-        Dissertation Management System
-    </a>
-
-    <div class="dropdownmenu">
-        <div class="user-name-container">
-            <i class="fas fa-user-circle fa-2x" style="color: white; margin: auto"></i>
-            <p class="name-of-user" th:text = "${user.firstName} + ' ' + ${user.lastName}">
-                Name
-            </p>
-            <div class="dropdown-content">
-                <p class="acc-type" th:text="'Account type: ' + ${user.accountType}"></p>
-
-                <div style="display: flex">
-                    <i class="fas fa-user-circle fa-lg" style=" margin: auto 0; padding-left: 5px;"></i>
-                    <a href="#">My profile</a>
-                </div>
-                <div style="display: flex">
-                    <i class="fas fa-sign-out-alt fa-lg" style="margin: auto 0; padding-left: 5px;"></i>
-                    <a th:href="@{/logout}">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}" id="side-nav-student">
-    <div class="sidenav">
-        <a th:href="@{/home}">Home</a>
-        <a href="#">My Projects</a>
-        <a href="#">Ideas</a>
-        <a href="#">Forum</a>
-    </div>
-</section>
-
-<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).COORDINATOR}" id="side-nav-coordinator">
-    <div class="sidenav">
-        <a th:href="@{/home}">Home</a>
-        <a th:href="@{/users}">Users</a>
-        <a href="#">Projects</a>
-        <a href="#">Ideas</a>
-        <a href="#">Forum</a>
-    </div>
-</section>
-
-<section th:if="${user.accountType eq T(com.university.dms.model.AccountType).SUPERVISOR}" id="side-nav-supervisor">
-    <div class="sidenav">
-        <a th:href="@{/home}">Home</a>
-        <a th:href="@{/supervisor-my-projects}">Projects</a>
-        <a href="#">Ideas</a>
-        <a href="#">Forum</a>
-    </div>
-</section>
+<div th:replace="fragments/navbar"></div>
 
 
 <section class="page-content">

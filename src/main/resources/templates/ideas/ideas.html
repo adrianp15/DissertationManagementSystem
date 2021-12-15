@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/projects.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>Dissertation Management System</title>
+</head>
+
+<body>
+<div th:replace="fragments/navbar"></div>
+
+<section class="page-content">
+    <div class="content" id="ideas">
+
+        <h2 style="margin-top: 20px">Ideas</h2>
+        <p style="font-size: 20px; color: #d41b19" th:if="${alreadyHaveTwoIdeasTaken}">You can take maximum 2 ideas at a time!</p>
+        <div th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT}" id="new-idea-button-wrapper" class="discussions-wrapper">
+            <a id="new-idea-button" class="btn" style="margin-top: 0" href="#">Post new idea</a>
+        </div>
+
+        <div id="add-new-idea-wrapper" class="discussions-wrapper hidden">
+            <h4 class="project-phase-title">Add new idea</h4>
+            <form th:action="@{/submit-idea}" th:object="${newIdea}" method="post"
+                  autocomplete="off">
+                <h5>Title</h5>
+                <div class="input-group">
+                    <textarea type="text" name="title"
+                              class="form-control" th:field="*{title}"></textarea>
+                </div>
+
+                <h5>Description</h5>
+                <div class="input-group">
+                    <textarea style="height: 100px; margin-bottom: 15px" type="text" name="message"
+                              class="form-control" th:field="*{description}"></textarea>
+                </div>
+
+                <button id="submit-idea-button" type="submit" class="save-button" style="margin-bottom: 0">Post new
+                    idea
+                </button>
+
+                <a id="go-back-button-from-add-new-idea" class="btn" style="margin-top: 0" href="#">Go back</a>
+            </form>
+        </div>
+
+        <div id="all-ideas-wrapper" class="discussions-wrapper">
+            <table th:if="${ideas.size() > 0}" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th style="width: 60%">Title</th>
+                    <th style="width: 15%">Posted by</th>
+                    <th style="width: 15%">Taken by</th>
+                    <th style="width: 7%">Select</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="idea : ${ideas}">
+                    <td>
+                        <p style="margin-bottom: 8px; font-weight: bold;" th:text="${idea.title}"></p>
+                        <p th:text="${idea.description}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${idea.postedBy.firstName + ' ' + idea.postedBy.lastName}"></p>
+                    </td>
+                    <td>
+                        <p th:if="${idea.takenBy != null}" th:text="${idea.takenBy.firstName + ' ' + idea.takenBy.lastName}"></p>
+                    </td>
+                    <td>
+                        <a th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}
+                                   AND ${idea.takenBy == null}" th:href="'/select-idea/' + ${idea.id}">Select</a><br>
+
+                        <a th:if="${user.accountType eq T(com.university.dms.model.AccountType).STUDENT}
+                                   AND ${idea.takenBy != null} AND ${idea.takenBy.id == user.id}" th:href="'/deselect-idea/' + ${idea.id}">Deselect</a>
+
+                        <a th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT} AND ${idea.takenBy == null}" th:href="'/delete-idea/' + ${idea.id}">Delete</a>
+                        <p th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT} AND ${idea.takenBy != null}">Delete</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</section>
+
+</body>
+
+<script>
+    $('#new-idea-button').click(function () {
+        $('#new-idea-button-wrapper').addClass('hidden');
+        $('#all-ideas-wrapper').addClass('hidden');
+        $('#add-new-idea-wrapper').removeClass('hidden');
+    });
+
+    $('#go-back-button-from-add-new-idea').click(function () {
+        $('#new-idea-button-wrapper').removeClass('hidden');
+        $('#all-ideas-wrapper').removeClass('hidden');
+        $('#add-new-idea-wrapper').addClass('hidden');
+    });
+
+    $('#submit-idea-button').click(function () {
+        setTimeout(function() {
+            var newurl = '/ideas';
+            window.history.pushState({path: newurl}, '', newurl);
+            location.reload();
+        }, 2000);
+    });
+
+
+</script>
+
+</html>

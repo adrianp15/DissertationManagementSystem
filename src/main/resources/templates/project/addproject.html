@@ -49,8 +49,8 @@
     <div class="sidenav">
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/student-my-projects}">My Projects</a>
-        <a href="#">Ideas</a>
-        <a href="#">Forum</a>
+        <a th:href="@{/ideas}">Ideas</a>
+        <a th:href="@{/forum}">Forum</a>
     </div>
 </section>
 
@@ -104,7 +104,7 @@
                     />
                 </select>
 
-                <input type="text" name="discussionId" th:value="${project.id}" style="display: none"/>
+<!--                <input type="text" name="discussionId" th:value="${project.id}" style="display: none"/>-->
 
                 <button type="submit" class="general-button">Add new project</button>
             </form>

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -360,7 +361,14 @@ public class SupervisorController {
 
         Project project = projectService.findProjectById(Integer.parseInt(id));
 
-       List<SupervisoryRecord> supervisoryRecords = projectService.findAllBySupervisor(user);
+        List<SupervisoryRecord> supervisoryRecords;
+
+        if(user.getAccountType() == AccountType.SUPERVISOR){
+            supervisoryRecords = projectService.findAllBySupervisor(user);
+        } else {
+            supervisoryRecords = projectService.findAllSupervisoryByProjectId(id);
+        }
+
 
         model.addAttribute("user", user);
         model.addAttribute("project", project);

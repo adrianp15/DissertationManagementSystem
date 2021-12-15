@@ -13,37 +13,6 @@
     <title>Dissertation Management System</title>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
-    <script>
-
-        // function search(){
-        //     var link = window.location.href;
-        //     var data = $('#user-data').val();
-        //
-        //     var newWindow = window.open(link + "/search/" + data,'_blank')
-        //
-        //     newWindow.focus();
-        //
-        // }
-
-        // $(document).ready(function() {
-        //     $('#search-user').click(function() {
-        //         var link = window.location.href;
-        //         var data = $('#user-data').val();
-        //
-        //         var newWindow = window.open(link + "/search/" + data,'_self')
-        //
-        //         newWindow.focus();
-        //     });
-        //
-        // });
-
-
-        // var btn = document.getElementById("search-user");
-        //
-        // btn.addEventListener("click", search);
-
-    </script>
-
 </head>
 
 <body>
@@ -79,8 +48,8 @@
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/users}">Users</a>
         <a th:href="@{/coordinatorviewprojects}">Projects</a>
-        <a href="#">Ideas</a>
-        <a href="#">Forum</a>
+        <a th:href="@{/ideas}">Ideas</a>
+        <a th:href="@{/forum}">Forum</a>
     </div>
 </section>
 
