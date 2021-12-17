@@ -67,6 +67,10 @@ public class ProjectService {
         return projectRepository.findProjectById(id);
     }
 
+    public Project findProjectBySuggestionId(Integer id){
+        return projectRepository.findProjectBySuggestionId(id);
+    }
+
     public void updateProject(Project project) {
         projectRepository.save(project);
     }

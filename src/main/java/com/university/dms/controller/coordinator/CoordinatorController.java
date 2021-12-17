@@ -162,19 +162,20 @@ public class CoordinatorController {
         project.setProjectStatus(ProjectStatus.SUGGESTION_APPROVED);
 
         projectService.setSupervisor(project);
-        return "redirect:/coordinatorviewprojects/";
+        return "redirect:/suggestions/" + project.getId();
     }
 
     @PostMapping("/post-suggestion-feedback")
     public String postFeedbackOnSuggestion(@Valid Suggestion suggestion, Model model) {
 
         Suggestion suggestion1 = suggestionService.findSuggestionById(suggestion.getId());
+        Project project = projectService.findProjectBySuggestionId(suggestion.getId());
 
         suggestion1.setFeedback(suggestion.getFeedback());
 
         suggestionService.saveSuggestion(suggestion1);
 
-        return "redirect:/coordinatorviewprojects/";
+        return "redirect:/suggestions/" + project.getId();
     }
 
     @PostMapping("/searchforproject")

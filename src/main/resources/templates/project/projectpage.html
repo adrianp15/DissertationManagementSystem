@@ -39,7 +39,11 @@
         </button>
         <button id="discussionbutton" class="projects-large-button" style="margin-right: 20px">Discussions</button>
 
-        <a th:if="${project.projectStatus eq T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED}"
+        <a th:if="${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_SUBMITTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_REJECTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_APPROVED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_SUBMITTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_REJECTED}"
            id="meetingsbutton" class="projects-large-button" style="margin-right: 20px" th:href="'/' + ${project.id} + '/meetingspage'">Meetings</a>
 
         <a th:if="${user.accountType ne T(com.university.dms.model.AccountType).STUDENT}" id="supervisory-records" class="projects-large-button"
@@ -273,7 +277,8 @@
 
         </div>
 
-        <div th:if="${project.projectStatus eq T(com.university.dms.model.project.enums.ProjectStatus).PROPOSAL_APPROVED}">
+        <div th:if="${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_SUBMITTED} AND
+                      ${project.projectStatus ne T(com.university.dms.model.project.enums.ProjectStatus).SUGGESTION_REJECTED}">
             <p class="bottom-icons"><i class="fas fa-play-circle fa-lg" style="color: orange"></i> - Not started</p>
             <p class="bottom-icons"><i class="fas fa-plus-circle fa-lg" style="color: #cc682a"></i> - New work submitted
             </p>

@@ -16,6 +16,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Project findProjectById(Integer id);
 
+    Project findProjectBySuggestionId(Integer id);
+
     @Query("FROM Project p WHERE p.suggestion.title LIKE %:title%")
     List<Project> findBySuggestion_Title(@Param("title") String title);
 
