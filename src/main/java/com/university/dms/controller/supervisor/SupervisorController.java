@@ -361,14 +361,7 @@ public class SupervisorController {
 
         Project project = projectService.findProjectById(Integer.parseInt(id));
 
-        List<SupervisoryRecord> supervisoryRecords;
-
-        if(user.getAccountType() == AccountType.SUPERVISOR){
-            supervisoryRecords = projectService.findAllBySupervisor(user);
-        } else {
-            supervisoryRecords = projectService.findAllSupervisoryByProjectId(id);
-        }
-
+        List<SupervisoryRecord> supervisoryRecords = projectService.findAllSupervisoryByProjectId(id);
 
         model.addAttribute("user", user);
         model.addAttribute("project", project);
